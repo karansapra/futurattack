@@ -41,12 +41,19 @@ class Engine: public BaseObject {
 	IKeyboard * _ikeyboard;
 	IMouse * _imouse;
 
+	float _dbg_message_time;
+	char _dbg_message[MAX_DBG_MESSAGE_LENGTH];
+
 public:
 	static Engine & GetInstance();
 
 	void InitAll(int * argc, char ** argv,int resx=640, int resy=480, bool double_buffered=true, bool fullscreen=false);
 	void Run();
+
 	float GetCurrentTime();
+	void ResetCurrentTime();
+
+	void ShowDebugMessage(const char * message);
 
 	void SetCurrentIViewable(IViewable & iviewable);
 	void SetCurrentIGameplay(IGameplay & igameplay);

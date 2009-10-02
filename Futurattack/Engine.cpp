@@ -45,6 +45,7 @@ Engine::Engine() : BaseObject()
 	_igameplay = NULL;
 	_ikeyboard = NULL;
 	_imouse = NULL;
+	_dbg_message_time = 0.0;
 }
 
 void Engine::InitAll(int *argc, char **argv, int resx, int resy, bool double_buffered, bool fullscreen)
@@ -57,14 +58,19 @@ void Engine::InitAll(int *argc, char **argv, int resx, int resy, bool double_buf
 	 */
 	glutInit(argc, argv);
 	if (double_buffered)
-		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	else
-		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
+		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(resx,resy);
 	glutCreateWindow("Futurattack - RIGOCOB Studios - 2009");
 	glutKeyboardFunc(_kb_func);
 	glutMouseFunc(_mouse_func);
 	glClearColor(0.0,0.0,0.0,1.0);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glShadeModel(GL_SMOOTH);
+	glFrontFace(GL_CCW);
+	glPolygonMode(GL_BACK,GL_FILL);
 
 	_init_passed = true;
 }
@@ -94,7 +100,54 @@ inline void Engine::GLDisplay()
 		_iviewable->Render();
 	}
 
+	float _posy_dbg=50.0;
+	if (_dbg_message_time>DBG_TIME-500.0)
+	{
+		_posy_dbg = 50.0*(DBG_TIME-_dbg_message_time)/500.0;
+	} else if (_dbg_message_time<=DBG_TIME-500.0 && _dbg_message_time>=500.0)
+	{
+		_posy_dbg = 50.0;
+	} else if (_dbg_message_time<500.0 && _dbg_message_time>0.0)
+	{
+		_posy_dbg = 50.0-50.0*(500.0-_dbg_message_time)/500.0;
+	}
+
+	if (_dbg_message_time>0.0)
+	{
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+
+			glLoadIdentity();
+			glOrtho(0.0,_resx,_resy,0.0,0.0001,1000.0);
+			gluLookAt(0.0,0.0,10.0 ,0.0,0.0,0.0,0.0,1.0,0.0);
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+
+			glBegin(GL_QUADS);
+				glColor3f(0.8,0.8,0.8);
+				glVertex3f(0.0,0.0,0.0);
+				glVertex3f(0.0,_posy_dbg,0.0);
+				glVertex3f(_resx,_posy_dbg,0.0);
+				glVertex3f(_resx,0.0,0.0);
+				glColor3f(1.0,1.0,1.0);
+			glEnd();
+		    glDisable(GL_TEXTURE_2D);
+		    glDisable(GL_DEPTH_TEST);
+			glColor4f(1.0,1.0,1.0,1.0);
+			glRasterPos2f(10.0, _posy_dbg-30.0);
+			glutBitmapString(GLUT_BITMAP_HELVETICA_12,(const unsigned char *)_dbg_message);
+		    glEnable(GL_TEXTURE_2D);
+		    glEnable(GL_DEPTH_TEST);
+
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+	}
+
 	//---------------
+
 
 	glutSwapBuffers();
 }
@@ -106,6 +159,9 @@ inline void Engine::GLTimer()
 	//Effectue tous les calculs et changements de scene du gameplay, s'il existe
 	if (_igameplay!=NULL)
 		_igameplay->GameplayProcessing();
+
+	if (_dbg_message_time>0.0)
+		_dbg_message_time -= (float)ENGINE_STEP;
 
 	glutPostRedisplay();
 	glutTimerFunc(ENGINE_STEP,_timer_func,0);
@@ -119,6 +175,17 @@ void Engine::SetCurrentIViewable(IViewable & iviewable)
 float Engine::GetCurrentTime()
 {
 	return _ms_time;
+}
+
+void Engine::ResetCurrentTime()
+{
+	_ms_time = 0.0;
+}
+
+void Engine::ShowDebugMessage(const char * message)
+{
+	_dbg_message_time = DBG_TIME;
+	strcpy(_dbg_message,message);
 }
 
 int Engine::GetScreenHeight()

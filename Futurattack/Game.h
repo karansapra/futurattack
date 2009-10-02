@@ -17,6 +17,8 @@
 #include "IViewable.h"
 #include "IGameplay.h"
 #include "TestFrame.h"
+#include "ITexture.h"
+#include "SunRasterTexture.h"
 
 
 #endif /* GAME_H_ */

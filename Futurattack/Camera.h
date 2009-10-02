@@ -3,6 +3,13 @@
  *
  *  Created on: 1 oct. 2009
  *      Author: clement
+ *
+ *
+ * Classe de gestion de la camera orthogonale
+ *
+ * On peut fixer la position de la camera, son point de visée, le volume
+ * de vision.
+ *
  */
 
 #ifndef CAMERA_H_
@@ -10,7 +17,6 @@
 
 #include <GL/freeglut.h>
 #include "BaseObject.h"
-
 
 class Camera: public BaseObject {
 
