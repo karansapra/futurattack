@@ -123,6 +123,8 @@ inline void Engine::GLDisplay()
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
 
+		    glDisable(GL_TEXTURE_2D);
+		    glDisable(GL_DEPTH_TEST);
 			glBegin(GL_QUADS);
 				glColor3f(0.8,0.8,0.8);
 				glVertex3f(0.0,0.0,0.0);
@@ -131,8 +133,6 @@ inline void Engine::GLDisplay()
 				glVertex3f(_resx,0.0,0.0);
 				glColor3f(1.0,1.0,1.0);
 			glEnd();
-		    glDisable(GL_TEXTURE_2D);
-		    glDisable(GL_DEPTH_TEST);
 			glColor4f(1.0,1.0,1.0,1.0);
 			glRasterPos2f(10.0, _posy_dbg-30.0);
 			glutBitmapString(GLUT_BITMAP_HELVETICA_12,(const unsigned char *)_dbg_message);

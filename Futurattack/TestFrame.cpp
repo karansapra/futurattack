@@ -14,8 +14,9 @@ TestFrame::TestFrame() : IViewable() {
 	_camera->SetEyePosition(0.0,0.0,10.0);
 	_camera->SetVolumeView(-width/100.0,width/100.0,height/100.0,-height/100.0,0.00001,10000.0);
 	_camera->SetLookAtPosition(0.0,0.0,0.0);
+	_camera->Zoom(2.1);
 
-	_current_zoom = 1.0;
+	_current_zoom = 2.1;
 	_ycam = 0.0;
 
 	_x = 0.0;
@@ -58,8 +59,8 @@ void TestFrame::PreRender()
 void TestFrame::Render()
 {
 	glPushMatrix();
-		glRotatef(Engine::GetInstance().GetCurrentTime()*360.0/10000.0,0.0,1.0,0.0);
-		glRotatef(Engine::GetInstance().GetCurrentTime()*360.0/18900.0,1.33,1.0,-3.0);
+		glRotatef(37.0,1.0,0.0,0.0);
+		glRotatef(Engine::GetInstance().GetCurrentTime()*360.0/3800.0,0.0,1.0,0.0);
 		glBegin(GL_QUADS);
 			// Front Face
 			glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, -1.0f,  1.0f);	// Bottom Left Of The Texture and Quad
