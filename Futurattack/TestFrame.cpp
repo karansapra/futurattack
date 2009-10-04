@@ -26,6 +26,15 @@ TestFrame::TestFrame() : IViewable() {
 	_sraster = new BitmapTexture();
 	_ground = new BitmapTexture();
 
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_COLOR_MATERIAL);
+	glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
+	float ambient[] = {1.0,1.0,1.0,1.0};
+
+	glLightfv(GL_LIGHT0,GL_AMBIENT,ambient);
+	glLightfv(GL_LIGHT0,GL_DIFFUSE,ambient);
+
 	if (_sraster->Load("/home/clement/Bureau/Logo2.bmp") && _ground->Load("/home/clement/Bureau/Ground.bmp"))
 	{
 		glEnable(GL_TEXTURE_2D);
@@ -39,11 +48,10 @@ TestFrame::TestFrame() : IViewable() {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
 		glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
 
-
 		glBindTexture(GL_TEXTURE_2D,_textures[1]);
 		glTexImage2D(GL_TEXTURE_2D,0,_ground->GetBPP()/8,_ground->GetWidth(),_ground->GetHeight(),0,GL_RGB,GL_UNSIGNED_BYTE,_ground->GetPixelsData());
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT);
@@ -75,9 +83,14 @@ void TestFrame::PreRender()
 
 void TestFrame::Render()
 {
+	glEnable(GL_BLEND);
+	glColor4f(1.0,1.0,1.0,1.0);
 	glPushMatrix();
-		glRotatef(22.0,1.0,0.0,0.0);
 		glRotatef(Engine::GetInstance().GetCurrentTime()*360.0/16800.0,0.0,1.0,0.0);
+		float lx = 2.0*cos(Engine::GetInstance().GetCurrentTime()*6.28/1000.0);
+		float ly = 2.0*sin(Engine::GetInstance().GetCurrentTime()*6.28/1000.0);
+		float l0[] = {lx,10.0,ly,1.0};
+		glLightfv(GL_LIGHT0,GL_POSITION,l0);
 
 		// Plan
 		glBindTexture(GL_TEXTURE_2D,_textures[1]);
@@ -88,7 +101,7 @@ void TestFrame::Render()
 			glTexCoord2f(10.0f, 10.0f); glVertex3f(50.0f, -1.0f,  50.0f);	// Bottom Right Of The Texture and Quad
 		glEnd();
 
-
+		glColor4f(1.0,1.0,1.0,1.0);
 		glBindTexture(GL_TEXTURE_2D,_textures[0]);
 		glBegin(GL_QUADS);
 			// Front Face
@@ -122,6 +135,9 @@ void TestFrame::Render()
 			glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f,  1.0f,  1.0f);	// Top Right Of The Texture and Quad
 			glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f,  1.0f, -1.0f);	// Top Left Of The Texture and Quad
 		glEnd();
+
+		glColor4f(0.07,0.5,0.99,0.5);
+		glutSolidSphere(3.0,32,32);
 
 	glPopMatrix();
 }

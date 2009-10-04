@@ -126,6 +126,7 @@ inline void Engine::GLDisplay()
 
 		    glDisable(GL_TEXTURE_2D);
 		    glDisable(GL_DEPTH_TEST);
+		    glDisable(GL_LIGHTING);
 			glEnable(GL_BLEND);
 
 			glBegin(GL_QUADS);
@@ -138,9 +139,12 @@ inline void Engine::GLDisplay()
 			glColor4f(1.0,1.0,1.0,1.0);
 			glRasterPos2f(10.0, _posy_dbg-30.0);
 			glutBitmapString(GLUT_BITMAP_HELVETICA_12,(const unsigned char *)_dbg_message);
-		    glEnable(GL_TEXTURE_2D);
+
+			glEnable(GL_TEXTURE_2D);
 		    glEnable(GL_DEPTH_TEST);
+		    glEnable(GL_LIGHTING);
 			glDisable(GL_BLEND);
+
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 
