@@ -25,7 +25,7 @@ TestFrame::TestFrame() : IViewable() {
 	//Chargement de la texture
 	_sraster = new BitmapTexture();
 	_ground = new BitmapTexture();
-	if (_sraster->Load("/home/clement/Bureau/Logo2.bmp") && _ground->Load("/home/clement/Bureau/Ground.bmp"))
+	if (_sraster->Load("/home/clement/Bureau/Logo2.bmp") && _ground->Load("/home/clement/Bureau/skybox_wo_alpha.bmp"))
 	{
 		glEnable(GL_TEXTURE_2D);
 		glGenTextures(2,_textures);

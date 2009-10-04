@@ -73,9 +73,9 @@ bool BitmapTexture::Load(const char *filename)
 		memcpy(&_pixels_data[_width*y*byte_per_pixel],&temp_pixel_data[(_height-y-1)*line_length],_width*byte_per_pixel);
 	}
 
-	//On remet en mode RGB au lieu de BGR
+	//On remet en mode RGBA au lieu de BGRA
 	char temp;
-	for (int i=0;i<_width*_height*(_bpp/8);i+=3)
+	for (int i=0;i<_width*_height*byte_per_pixel;i+=byte_per_pixel)
 	{
 		temp = _pixels_data[i+2];
 		_pixels_data[i+2] = _pixels_data[i];
