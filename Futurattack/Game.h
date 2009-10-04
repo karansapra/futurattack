@@ -18,6 +18,7 @@
 #include "IGameplay.h"
 #include "TestFrame.h"
 #include "ITexture.h"
+#include "BitmapTexture.h"
 #include "SunRasterTexture.h"
 
 

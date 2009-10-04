@@ -10,8 +10,6 @@
 
 #include "ITexture.h"
 
-typedef unsigned int DWORD;
-
 struct SunRasterHeader
 {
 	DWORD MagicNumber;
@@ -25,7 +23,7 @@ struct SunRasterHeader
 };
 
 class SunRasterTexture: public ITexture {
-	void _endian_convert(DWORD & d);
+
 public:
 	SunRasterTexture();
 	virtual ~SunRasterTexture();

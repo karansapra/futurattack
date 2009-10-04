@@ -15,14 +15,15 @@
 #include "IKeyboard.h"
 #include "Engine.h"
 #include "SunRasterTexture.h"
-
+#include "BitmapTexture.h"
 
 class TestFrame: public IViewable, public IKeyboard, public IMouse {
 	float _current_zoom;
 	float _ycam;
 	float _x,_y;
-	SunRasterTexture * _sraster;
-	GLuint _textures[1];
+	BitmapTexture * _sraster;
+	BitmapTexture * _ground;
+	GLuint _textures[2];
 
 public:
 	TestFrame();

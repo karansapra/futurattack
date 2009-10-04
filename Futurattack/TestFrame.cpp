@@ -23,19 +23,34 @@ TestFrame::TestFrame() : IViewable() {
 	_y = 0.0;
 
 	//Chargement de la texture
-	_sraster = new SunRasterTexture();
-	if (_sraster->Load("/home/clement/Bureau/Logo2.im24"))
+	_sraster = new BitmapTexture();
+	_ground = new BitmapTexture();
+	if (_sraster->Load("/home/clement/Bureau/Logo2.bmp") && _ground->Load("/home/clement/Bureau/Ground.bmp"))
 	{
 		glEnable(GL_TEXTURE_2D);
-		glGenTextures(1,_textures);
-		glBindTexture(GL_TEXTURE_2D,1);
+		glGenTextures(2,_textures);
+
+		glBindTexture(GL_TEXTURE_2D,_textures[0]);
 		glTexImage2D(GL_TEXTURE_2D,0,_sraster->GetBPP()/8,_sraster->GetWidth(),_sraster->GetHeight(),0,GL_RGB,GL_UNSIGNED_BYTE,_sraster->GetPixelsData());
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
 		glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
+
+
+		glBindTexture(GL_TEXTURE_2D,_textures[1]);
+		glTexImage2D(GL_TEXTURE_2D,0,_ground->GetBPP()/8,_ground->GetWidth(),_ground->GetHeight(),0,GL_RGB,GL_UNSIGNED_BYTE,_ground->GetPixelsData());
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+		glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
 	}
+
+	delete _sraster;
+	delete _ground;
 
 	Engine::GetInstance().ShowDebugMessage("Version Alpha Release 0.1\nC.JACOB");
 
@@ -61,6 +76,18 @@ void TestFrame::Render()
 	glPushMatrix();
 		glRotatef(37.0,1.0,0.0,0.0);
 		glRotatef(Engine::GetInstance().GetCurrentTime()*360.0/3800.0,0.0,1.0,0.0);
+
+		// Plan
+		glBindTexture(GL_TEXTURE_2D,_textures[1]);
+		glBegin(GL_QUADS);
+			glTexCoord2f(1.0f, 0.0f); glVertex3f(5.0f, -1.0f, -5.0f);	// Top Right Of The Texture and Quad
+			glTexCoord2f(0.0f, 0.0f); glVertex3f(-5.0f, -1.0f, -5.0f);	// Top Left Of The Texture and Quad
+			glTexCoord2f(0.0f, 1.0f); glVertex3f(-5.0f, -1.0f,  5.0f);	// Bottom Left Of The Texture and Quad
+			glTexCoord2f(1.0f, 1.0f); glVertex3f(5.0f, -1.0f,  5.0f);	// Bottom Right Of The Texture and Quad
+		glEnd();
+
+
+		glBindTexture(GL_TEXTURE_2D,_textures[0]);
 		glBegin(GL_QUADS);
 			// Front Face
 			glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, -1.0f,  1.0f);	// Bottom Left Of The Texture and Quad
@@ -93,6 +120,7 @@ void TestFrame::Render()
 			glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f,  1.0f,  1.0f);	// Top Right Of The Texture and Quad
 			glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f,  1.0f, -1.0f);	// Top Left Of The Texture and Quad
 		glEnd();
+
 	glPopMatrix();
 }
 

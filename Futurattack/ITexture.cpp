@@ -53,3 +53,19 @@ const char *ITexture::ToString()
 }
 
 
+void ITexture::_endian_convert(DWORD & d)
+{
+	DWORD d_buf;
+	unsigned char * d_char = (unsigned char *)&d;
+	d_buf = (d_char[0]<<24) + (d_char[1]<<16) + (d_char[2]<<8) + (d_char[3]);
+	d = d_buf;
+}
+
+void ITexture::_endian_convert(WORD & d)
+{
+	WORD d_buf;
+	unsigned char * d_char = (unsigned char *)&d;
+	d_buf = (d_char[0]<<8) + (d_char[1]);
+	d = d_buf;
+}
+
