@@ -62,7 +62,7 @@ void Engine::InitAll(int *argc, char **argv, int resx, int resy, bool double_buf
 	else
 		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(resx,resy);
-	glutCreateWindow("Futurattack - RIGOCOB Studios - 2009");
+	glutCreateWindow("Futurattack - RJ Game Studio - 2009");
 	glutKeyboardFunc(_kb_func);
 	glutMouseFunc(_mouse_func);
 	glClearColor(0.0,0.0,0.0,1.0);
@@ -129,7 +129,7 @@ inline void Engine::GLDisplay()
 			glEnable(GL_BLEND);
 
 			glBegin(GL_QUADS);
-				glColor4f(0.8,0.8,0.8,0.2);
+				glColor4f(0.6,0.6,0.6,0.5);
 				glVertex3f(0.0,0.0,0.0);
 				glVertex3f(0.0,_posy_dbg,0.0);
 				glVertex3f(_resx,_posy_dbg,0.0);

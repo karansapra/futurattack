@@ -14,9 +14,9 @@ TestFrame::TestFrame() : IViewable() {
 	_camera->SetEyePosition(0.0,0.0,10.0);
 	_camera->SetVolumeView(-width/100.0,width/100.0,height/100.0,-height/100.0,0.00001,10000.0);
 	_camera->SetLookAtPosition(0.0,0.0,0.0);
-	_camera->Zoom(2.1);
+	_camera->Zoom(1.0);
 
-	_current_zoom = 2.1;
+	_current_zoom = 1.0;
 	_ycam = 0.0;
 
 	_x = 0.0;
@@ -45,8 +45,8 @@ TestFrame::TestFrame() : IViewable() {
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT);
 		glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
 	}
 
@@ -69,22 +69,23 @@ bool TestFrame::AnimationFinished()
 
 void TestFrame::PreRender()
 {
-	//_camera->Move(1.2*sin(6.28*Engine::GetInstance().GetCurrentTime()/1000.0),0.0,0.0);
+	_camera->Zoom(0.5+0.14*sin(6.28*Engine::GetInstance().GetCurrentTime()/40000.0));
+	_camera->SetEyePosition(0.0,_ycam + 2.0*sin(6.28*Engine::GetInstance().GetCurrentTime()/22600.0),10.0);
 }
 
 void TestFrame::Render()
 {
 	glPushMatrix();
-		glRotatef(37.0,1.0,0.0,0.0);
-		glRotatef(Engine::GetInstance().GetCurrentTime()*360.0/6800.0,0.0,1.0,0.0);
+		glRotatef(22.0,1.0,0.0,0.0);
+		glRotatef(Engine::GetInstance().GetCurrentTime()*360.0/16800.0,0.0,1.0,0.0);
 
 		// Plan
 		glBindTexture(GL_TEXTURE_2D,_textures[1]);
 		glBegin(GL_QUADS);
-			glTexCoord2f(1.0f, 0.0f); glVertex3f(5.0f, -1.0f, -5.0f);	// Top Right Of The Texture and Quad
-			glTexCoord2f(0.0f, 0.0f); glVertex3f(-5.0f, -1.0f, -5.0f);	// Top Left Of The Texture and Quad
-			glTexCoord2f(0.0f, 1.0f); glVertex3f(-5.0f, -1.0f,  5.0f);	// Bottom Left Of The Texture and Quad
-			glTexCoord2f(1.0f, 1.0f); glVertex3f(5.0f, -1.0f,  5.0f);	// Bottom Right Of The Texture and Quad
+			glTexCoord2f(10.0f, 0.0f); glVertex3f(50.0f, -1.0f, -50.0f);	// Top Right Of The Texture and Quad
+			glTexCoord2f(0.0f, 0.0f); glVertex3f(-50.0f, -1.0f, -50.0f);	// Top Left Of The Texture and Quad
+			glTexCoord2f(0.0f, 10.0f); glVertex3f(-50.0f, -1.0f,  50.0f);	// Bottom Left Of The Texture and Quad
+			glTexCoord2f(10.0f, 10.0f); glVertex3f(50.0f, -1.0f,  50.0f);	// Bottom Right Of The Texture and Quad
 		glEnd();
 
 
@@ -134,22 +135,22 @@ void TestFrame::KeyPressed(char key)
 {
 	if (key=='z')
 	{
-		_ycam+=2.0;
-	} else if (key=='s' && _current_zoom>0.3)
+		_ycam+=0.02;
+	} else if (key=='s')
 	{
-		_ycam-=2.0;
+		_ycam-=0.02;
 	} else if (key=='l')
 	{
-		_x+=2.0;
+		_x+=0.02;
 	} else if (key=='j')
 	{
-		_x-=2.0;
+		_x-=0.02;
 	} else if (key=='k')
 	{
-		_y-=2.0;
+		_y-=0.02;
 	} else if (key=='i')
 	{
-		_y+=2.0;
+		_y+=0.02;
 	}
 	_camera->SetEyePosition(0.0,_ycam,10.0);
 	_camera->Move(_x,_y,0.0);
@@ -157,12 +158,12 @@ void TestFrame::KeyPressed(char key)
 
 void TestFrame::ButtonPressed(unsigned char button, int x, int y)
 {
-	if (button==3)
+	if (button==3 && _current_zoom<1.0)
 	{
-		_current_zoom+=0.2;
-	} else if (button==4 && _current_zoom>0.3)
+		_current_zoom+=0.02;
+	} else if (button==4 && _current_zoom>0.05)
 	{
-		_current_zoom-=0.2;
+		_current_zoom-=0.02;
 	}
 	_camera->Zoom(_current_zoom);
 }

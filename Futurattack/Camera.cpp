@@ -43,9 +43,9 @@ void Camera::ApplyChanges()
 	_params_changed = false;
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(_left,_right,_bottom,_top,_near,_far);
 	glTranslatef(_mx,_my,_mz);
 	glScalef(_z,_z,_z);
+	glOrtho(_left,_right,_bottom,_top,_near,_far);
 	gluLookAt(_eyex,_eyey,_eyez,_posx,_posy,_posz,0.0,1.0,0.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
