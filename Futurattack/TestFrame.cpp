@@ -25,7 +25,7 @@ TestFrame::TestFrame() : IViewable() {
 	//Chargement de la texture
 	_sraster = new BitmapTexture();
 	_ground = new BitmapTexture();
-	if (_sraster->Load("/home/clement/Bureau/Logo2.bmp") && _ground->Load("/home/clement/Bureau/skybox_wo_alpha.bmp"))
+	if (_sraster->Load("/home/clement/Bureau/Logo2.bmp") && _ground->Load("/home/clement/Bureau/skybox.bmp"))
 	{
 		glEnable(GL_TEXTURE_2D);
 		glGenTextures(2,_textures);
@@ -40,7 +40,7 @@ TestFrame::TestFrame() : IViewable() {
 
 
 		glBindTexture(GL_TEXTURE_2D,_textures[1]);
-		glTexImage2D(GL_TEXTURE_2D,0,_ground->GetBPP()/8,_ground->GetWidth(),_ground->GetHeight(),0,GL_RGB,GL_UNSIGNED_BYTE,_ground->GetPixelsData());
+		glTexImage2D(GL_TEXTURE_2D,0,_ground->GetBPP()/8,_ground->GetWidth(),_ground->GetHeight(),0,GL_RGBA,GL_UNSIGNED_BYTE,_ground->GetPixelsData());
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);

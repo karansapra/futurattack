@@ -71,6 +71,7 @@ void Engine::InitAll(int *argc, char **argv, int resx, int resy, bool double_buf
 	glShadeModel(GL_SMOOTH);
 	glFrontFace(GL_CCW);
 	glPolygonMode(GL_BACK,GL_FILL);
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
 	_init_passed = true;
 }
@@ -125,20 +126,21 @@ inline void Engine::GLDisplay()
 
 		    glDisable(GL_TEXTURE_2D);
 		    glDisable(GL_DEPTH_TEST);
+			glEnable(GL_BLEND);
+
 			glBegin(GL_QUADS);
-				glColor3f(0.8,0.8,0.8);
+				glColor4f(0.8,0.8,0.8,0.2);
 				glVertex3f(0.0,0.0,0.0);
 				glVertex3f(0.0,_posy_dbg,0.0);
 				glVertex3f(_resx,_posy_dbg,0.0);
 				glVertex3f(_resx,0.0,0.0);
-				glColor3f(1.0,1.0,1.0);
 			glEnd();
 			glColor4f(1.0,1.0,1.0,1.0);
 			glRasterPos2f(10.0, _posy_dbg-30.0);
 			glutBitmapString(GLUT_BITMAP_HELVETICA_12,(const unsigned char *)_dbg_message);
 		    glEnable(GL_TEXTURE_2D);
 		    glEnable(GL_DEPTH_TEST);
-
+			glDisable(GL_BLEND);
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 
