@@ -231,9 +231,13 @@ void Engine::SetCurrentIMouse(IMouse & imouse)
 	_imouse = &imouse;
 }
 
+void Engine::Release()
+{
+}
+
 Engine::~Engine()
 {
-	// TODO Auto-generated destructor stub
+
 }
 
 Engine & Engine::GetInstance()

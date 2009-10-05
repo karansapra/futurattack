@@ -34,5 +34,6 @@ int main(int argc, char ** argv)
 	e->InitAll(&argc,argv);
 	e->SetCurrentIGameplay(*new MyGameplay());
 	e->Run();
+	e->Release();
 	return 0;
 }

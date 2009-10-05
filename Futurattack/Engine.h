@@ -16,6 +16,7 @@
 #include "IKeyboard.h"
 #include "IMouse.h"
 
+
 //Pour permettre le rendu des frames
 void _display_func();
 void _timer_func(int id);
@@ -68,6 +69,9 @@ public:
 	inline void GLTimer();
 
 	const char * ToString();
+
+	void Release();
+
 	virtual ~Engine();
 };
 

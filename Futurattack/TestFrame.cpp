@@ -95,10 +95,10 @@ void TestFrame::Render()
 		// Plan
 		glBindTexture(GL_TEXTURE_2D,_textures[1]);
 		glBegin(GL_QUADS);
-			glTexCoord2f(10.0f, 0.0f); glVertex3f(50.0f, -1.0f, -50.0f);	// Top Right Of The Texture and Quad
+			glTexCoord2f(1.0f, 0.0f); glVertex3f(50.0f, -1.0f, -50.0f);	// Top Right Of The Texture and Quad
 			glTexCoord2f(0.0f, 0.0f); glVertex3f(-50.0f, -1.0f, -50.0f);	// Top Left Of The Texture and Quad
 			glTexCoord2f(0.0f, 10.0f); glVertex3f(-50.0f, -1.0f,  50.0f);	// Bottom Left Of The Texture and Quad
-			glTexCoord2f(10.0f, 10.0f); glVertex3f(50.0f, -1.0f,  50.0f);	// Bottom Right Of The Texture and Quad
+			glTexCoord2f(1.0f, 10.0f); glVertex3f(50.0f, -1.0f,  50.0f);	// Bottom Right Of The Texture and Quad
 		glEnd();
 
 		glColor4f(1.0,1.0,1.0,1.0);
@@ -176,7 +176,7 @@ void TestFrame::ButtonPressed(unsigned char button, int x, int y)
 {
 	if (button==3 && _current_zoom<1.0)
 	{
-		_current_zoom+=0.02;
+		Engine::GetInstance().Release();
 	} else if (button==4 && _current_zoom>0.05)
 	{
 		_current_zoom-=0.02;
