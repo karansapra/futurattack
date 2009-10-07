@@ -64,6 +64,8 @@ TestFrame::TestFrame() : IViewable() {
 	Engine::GetInstance().ShowDebugMessage("Version Alpha Release 0.1\nC.JACOB");
 
 	//Lumiere
+	OBJ3DObject obj;
+	obj.Load("/home/clement/Bureau/untitled.obj");
 }
 
 TestFrame::~TestFrame() {

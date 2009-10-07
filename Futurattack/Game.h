@@ -16,10 +16,14 @@
 #include "IKeyboard.h"
 #include "IViewable.h"
 #include "IGameplay.h"
-#include "TestFrame.h"
+
 #include "ITexture.h"
 #include "BitmapTexture.h"
 #include "SunRasterTexture.h"
 
+#include "I3DObject.h"
+#include "OBJ3DObject.h"
+
+#include "TestFrame.h"
 
 #endif /* GAME_H_ */

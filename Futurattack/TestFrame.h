@@ -16,6 +16,7 @@
 #include "Engine.h"
 #include "SunRasterTexture.h"
 #include "BitmapTexture.h"
+#include "OBJ3DObject.h"
 
 class TestFrame: public IViewable, public IKeyboard, public IMouse {
 	float _current_zoom;
