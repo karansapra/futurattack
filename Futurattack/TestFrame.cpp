@@ -34,7 +34,7 @@ TestFrame::TestFrame() : IViewable() {
 	glLightfv(GL_LIGHT0,GL_AMBIENT,ambient);
 	glLightfv(GL_LIGHT0,GL_DIFFUSE,ambient);
 
-	if (_sraster->Load("/home/clement/Bureau/file_Cube.bmp"))
+	if (_sraster->Load("/home/clement/Bureau/Logo2.bmp"))
 	{
 		glEnable(GL_TEXTURE_2D);
 		glGenTextures(1,_textures);
@@ -55,8 +55,9 @@ TestFrame::TestFrame() : IViewable() {
 
 	//Lumiere
 	_obj = new OBJ3DObject();
-	_obj->Load("/home/clement/Bureau/untitled.obj");
 	_obj->SwitchTextureOrigin();
+	_obj->Load("/home/clement/Bureau/untitled.obj");
+
 }
 
 TestFrame::~TestFrame() {
@@ -79,20 +80,26 @@ void TestFrame::Render()
 	glColor4f(1.0,1.0,1.0,1.0);
 	glPushMatrix();
 		glRotatef(Engine::GetInstance().GetCurrentTime()*360.0/16800.0,0.0,1.0,0.0);
-		float lx = 2.0*cos(Engine::GetInstance().GetCurrentTime()*6.28/1000.0);
-		float ly = 2.0*sin(Engine::GetInstance().GetCurrentTime()*6.28/1000.0);
+		float lx = 4.0*cos(Engine::GetInstance().GetCurrentTime()*6.28/1000.0);
+		float ly = 4.0*sin(Engine::GetInstance().GetCurrentTime()*6.28/1000.0);
 		float l0[] = {lx,10.0,ly,1.0};
 		glLightfv(GL_LIGHT0,GL_POSITION,l0);
 
 		glColor4f(1.0,1.0,1.0,1.0);
-
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D,_textures[0]);
-		_obj->Render();
+		//glEnable(GL_TEXTURE_2D);
 		glDisable(GL_TEXTURE_2D);
+		//glBindTexture(GL_TEXTURE_2D,_textures[0]);
+
+		float spec[] = {1.0,0.0,1.0,1.0};
+		glMaterialfv(GL_FRONT,GL_SPECULAR,spec);
+		glMateriali(GL_FRONT,GL_SHININESS,128);
+		glEnable(GL_COLOR_MATERIAL);
+
+		_obj->Render();
+		//glDisable(GL_TEXTURE_2D);
 
 		glColor4f(0.07,0.5,0.99,0.5);
-		glutSolidSphere(3.0,32,32);
+		//glutSolidSphere(3.0,32,32);
 
 	glPopMatrix();
 }

@@ -8,20 +8,24 @@
 #ifndef OBJ3DOBJECT_H_
 #define OBJ3DOBJECT_H_
 
+//Pour utiliser OpenGL 1.5, etc...
+#define GL_GLEXT_PROTOTYPES
+
+#include <GL/freeglut.h>
+#include <GL/glx.h>
+#include <GL/glext.h>
 #include "I3DObject.h"
 #include "Constants.h"
+#include "Mesh.h"
+
 
 class OBJ3DObject: public I3DObject {
-	Vertex3f _vs[OBJ_FILE_MAX_VERTEX];
 	int _vcount;
-	Vertex3f _vns[OBJ_FILE_MAX_NORMALS];
-	int _vncount;
-	Vertex2f _vts[OBJ_FILE_MAX_TEXTCOORDS];
-	int _vtcount;
-	Triangle _tris[OBJ_FILE_MAX_TRIANGLES];
-	int _tricount;
 
 	bool _switch;
+
+	Mesh * _meshes[OBJ_FILE_MAX_MESHES];
+	int _nmeshes;
 
 public:
 	OBJ3DObject();

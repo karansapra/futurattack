@@ -14,15 +14,15 @@
 
 struct Vertex3f
 {
-	float x;
-	float y;
-	float z;
+	GLfloat x;
+	GLfloat y;
+	GLfloat z;
 };
 
 struct Vertex2f
 {
-	float u;
-	float v;
+	GLfloat u;
+	GLfloat v;
 };
 
 struct Triangle

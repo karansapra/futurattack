@@ -9,6 +9,8 @@
 
 OBJ3DObject::OBJ3DObject() : I3DObject() {
 	_switch = false;
+	for (int i=0;i<OBJ_FILE_MAX_MESHES;i++)
+		_meshes[i]=NULL;
 }
 
 OBJ3DObject::~OBJ3DObject() {
@@ -29,60 +31,45 @@ const char *OBJ3DObject::ToString()
 
 void OBJ3DObject::Render()
 {
-	int v_idx;
-	int n_idx;
-	int t_idx;
-
-	if (_switch)
-	{
-		glBegin(GL_TRIANGLES);
-		for (int i=0;i<_tricount;i++)
-		{
-			for (int j=0;j<3;j++)
-			{
-				v_idx = _tris[i].vertex_indices[j]-1;
-				n_idx = _tris[i].normal_indices[j]-1;
-				t_idx = _tris[i].uv_indices[j]-1;
-				glNormal3f(_vns[n_idx].x,_vns[n_idx].y,_vns[n_idx].z);
-				glTexCoord2f(_vts[t_idx].u,1.0-_vts[t_idx].v);
-				glVertex3f(_vs[v_idx].x,_vs[v_idx].y,_vs[v_idx].z);
-			}
-		}
-		glEnd();
-	} else {
-		glBegin(GL_TRIANGLES);
-		for (int i=0;i<_tricount;i++)
-		{
-			for (int j=0;j<3;j++)
-			{
-				v_idx = _tris[i].vertex_indices[j]-1;
-				n_idx = _tris[i].normal_indices[j]-1;
-				t_idx = _tris[i].uv_indices[j]-1;
-				glNormal3f(_vns[n_idx].x,_vns[n_idx].y,_vns[n_idx].z);
-				glTexCoord2f(_vts[t_idx].u,_vts[t_idx].v);
-				glVertex3f(_vs[v_idx].x,_vs[v_idx].y,_vs[v_idx].z);
-			}
-		}
-		glEnd();
-	}
+	for (int i=0;i<_nmeshes;i++)
+		_meshes[i]->Render();
 }
 
 
 
 bool OBJ3DObject::Load(const char *filename)
 {
-	_vcount=0;
-	_vncount=0;
-	_vtcount=0;
-	_tricount=0;
+	_nmeshes = 0;
+
+	int vertex_count=0;
+	int normal_count=0;
+	int texture_count=0;
+
+	int vertex_list_count=0;
+	int normal_list_count=0;
+	int texture_list_count=0;
+
 
 	char buffer_line[OBJ_FILE_LINE_LENGTH];
 	int pos=0;
 
+	int v1, v2, v3;
+	int n1, n2, n3;
+	int t1, t2, t3;
+
 	FILE * f = fopen(filename,"r");
+
 	if (f==NULL)
 		return false;
 
+	Vertex3f * vertex = new Vertex3f[OBJ_FILE_MAX_VERTEX];
+	Vertex3f * vertex_list = new Vertex3f[OBJ_FILE_MAX_VERTEX*3];
+
+	Vertex3f * normal = new Vertex3f[OBJ_FILE_MAX_NORMALS];
+	Vertex3f * normal_list = new Vertex3f[OBJ_FILE_MAX_NORMALS*3];
+
+	Vertex2f * texture = new Vertex2f[OBJ_FILE_MAX_TEXTCOORDS];
+	Vertex2f * texture_list = new Vertex2f[OBJ_FILE_MAX_TEXTCOORDS*3];
 
 	while (!feof(f))
 	{
@@ -100,28 +87,49 @@ bool OBJ3DObject::Load(const char *filename)
 			if (buffer_line[1]==' ')
 			{
 				//On est dans le cas d'un vertex simple, de positionnement
-				sscanf(buffer_line+2,"%f %f %f",&_vs[_vcount].x,&_vs[_vcount].y,&_vs[_vcount].z);
-				_vcount++;
+				sscanf(buffer_line+2,"%f %f %f",
+						&vertex[vertex_count].x,
+						&vertex[vertex_count].y,
+						&vertex[vertex_count].z);
+				vertex_count++;
 			} else if (buffer_line[1]=='n')
 			{
-				//On est dans le cas des normales
-				sscanf(buffer_line+3,"%f %f %f",&_vns[_vncount].x,&_vns[_vncount].y,&_vns[_vncount].z);
-				_vncount++;
+				sscanf(buffer_line+3,"%f %f %f",
+						&normal[normal_count].x,
+						&normal[normal_count].y,
+						&normal[normal_count].z);
+				normal_count++;
 			} else if (buffer_line[1]=='t')
 			{
-				//On est dans le cas des uv coords
-				sscanf(buffer_line+3,"%f %f",&_vts[_vtcount].u,&_vts[_vtcount].v);
-				_vtcount++;
+				sscanf(buffer_line+3,"%f %f",
+						&texture[texture_count].u,
+						&texture[texture_count].v);
+				if (_switch)
+					texture[texture_count].v = 1.0-texture[texture_count].v;
+				texture_count++;
 			}
 			break;
 
 		case 'f':
 			//On est dans le cas d'une face
 			sscanf(buffer_line+2,"%d/%d/%d %d/%d/%d %d/%d/%d",
-					&_tris[_tricount].vertex_indices[0],&_tris[_tricount].uv_indices[0],&_tris[_tricount].normal_indices[0],
-					&_tris[_tricount].vertex_indices[1],&_tris[_tricount].uv_indices[1],&_tris[_tricount].normal_indices[1],
-					&_tris[_tricount].vertex_indices[2],&_tris[_tricount].uv_indices[2],&_tris[_tricount].normal_indices[2]);
-			_tricount++;
+					&v1,&t1,&n1,
+					&v2,&t2,&n2,
+					&v3,&t3,&n3);
+			//Liste des vertex de l'objet
+			memcpy(&vertex_list[vertex_list_count++],&vertex[v1-1],sizeof(Vertex3f));
+			memcpy(&vertex_list[vertex_list_count++],&vertex[v2-1],sizeof(Vertex3f));
+			memcpy(&vertex_list[vertex_list_count++],&vertex[v3-1],sizeof(Vertex3f));
+
+			//Liste des normales de l'objet
+			memcpy(&normal_list[normal_list_count++],&normal[v1-1],sizeof(Vertex3f));
+			memcpy(&normal_list[normal_list_count++],&normal[v2-1],sizeof(Vertex3f));
+			memcpy(&normal_list[normal_list_count++],&normal[v3-1],sizeof(Vertex3f));
+
+			//Liste des UV de l'objet
+			memcpy(&texture_list[texture_list_count++],&texture[t1-1],sizeof(Vertex2f));
+			memcpy(&texture_list[texture_list_count++],&texture[t2-1],sizeof(Vertex2f));
+			memcpy(&texture_list[texture_list_count++],&texture[t3-1],sizeof(Vertex2f));
 			break;
 
 		default:
@@ -129,17 +137,25 @@ bool OBJ3DObject::Load(const char *filename)
 		}
 	}
 
-	for (int i=0;i<_vtcount;i++)
-	{
-		printf("UV:%f %f\n",_vts[i].u,_vts[i].v);
-	}
-
-	printf("Vertex:%d\n",_vcount);
-	printf("Normales:%d\n",_vncount);
-	printf("UV:%d\n\n",_vtcount);
-	printf("Triangles:%d\n",_tricount);
-
 	fclose(f);
+
+	_meshes[0] = new Mesh();
+	_meshes[0]->SetVertexList(vertex_list,vertex_list_count);
+	_meshes[0]->SetNormalList(normal_list,normal_list_count);
+	_meshes[0]->BuildUp();
+	_nmeshes++;
+
+	delete[] vertex;
+	delete[] vertex_list;
+
+	delete[] normal;
+	delete[] normal_list;
+
+	delete[] texture;
+	delete[] texture_list;
+
+	_vcount = vertex_list_count;
+
 	return true;
 }
 

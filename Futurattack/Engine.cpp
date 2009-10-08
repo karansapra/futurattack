@@ -72,6 +72,7 @@ void Engine::InitAll(int *argc, char **argv, int resx, int resy, bool double_buf
 	glFrontFace(GL_CCW);
 	glPolygonMode(GL_BACK,GL_FILL);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_NORMALIZE);
 
 	_init_passed = true;
 }
