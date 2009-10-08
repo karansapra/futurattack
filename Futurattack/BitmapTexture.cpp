@@ -68,6 +68,7 @@ bool BitmapTexture::Load(const char *filename)
 	if ((_width*byte_per_pixel/4)*4!=(_width*byte_per_pixel))
 		line_length = ((_width*byte_per_pixel/4)+1)*4;
 
+
 	for (int y=0;y<_height;y++)
 	{
 		memcpy(&_pixels_data[_width*y*byte_per_pixel],&temp_pixel_data[(_height-y-1)*line_length],_width*byte_per_pixel);
