@@ -58,9 +58,9 @@ void Engine::InitAll(int *argc, char **argv, int resx, int resy, bool double_buf
 	 */
 	glutInit(argc, argv);
 	if (double_buffered)
-		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
 	else
-		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
+		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
 	glutInitWindowSize(resx,resy);
 	glutCreateWindow("Futurattack - RJ Game Studio - 2009");
 	glutKeyboardFunc(_kb_func);
@@ -72,7 +72,6 @@ void Engine::InitAll(int *argc, char **argv, int resx, int resy, bool double_buf
 	glFrontFace(GL_CCW);
 	glPolygonMode(GL_BACK,GL_FILL);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_NORMALIZE);
 
 	_init_passed = true;
 }

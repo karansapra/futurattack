@@ -98,7 +98,12 @@ bool OBJ3DObject::Load(const char *filename)
 						&normal[normal_count].x,
 						&normal[normal_count].y,
 						&normal[normal_count].z);
+				printf("N:%f %f %f\n",
+						normal[normal_count].x,
+						normal[normal_count].y,
+						normal[normal_count].z);
 				normal_count++;
+
 			} else if (buffer_line[1]=='t')
 			{
 				sscanf(buffer_line+3,"%f %f",
@@ -111,25 +116,37 @@ bool OBJ3DObject::Load(const char *filename)
 			break;
 
 		case 'f':
+			if (texture_count!=0)
+			{
 			//On est dans le cas d'une face
 			sscanf(buffer_line+2,"%d/%d/%d %d/%d/%d %d/%d/%d",
 					&v1,&t1,&n1,
 					&v2,&t2,&n2,
 					&v3,&t3,&n3);
+			} else
+			{
+				sscanf(buffer_line+2,"%d//%d %d//%d %d//%d",
+						&v1,&n1,
+						&v2,&n2,
+						&v3,&n3);
+			}
 			//Liste des vertex de l'objet
 			memcpy(&vertex_list[vertex_list_count++],&vertex[v1-1],sizeof(Vertex3f));
 			memcpy(&vertex_list[vertex_list_count++],&vertex[v2-1],sizeof(Vertex3f));
 			memcpy(&vertex_list[vertex_list_count++],&vertex[v3-1],sizeof(Vertex3f));
 
 			//Liste des normales de l'objet
-			memcpy(&normal_list[normal_list_count++],&normal[v1-1],sizeof(Vertex3f));
-			memcpy(&normal_list[normal_list_count++],&normal[v2-1],sizeof(Vertex3f));
-			memcpy(&normal_list[normal_list_count++],&normal[v3-1],sizeof(Vertex3f));
+			memcpy(&normal_list[normal_list_count++],&normal[n1-1],sizeof(Vertex3f));
+			memcpy(&normal_list[normal_list_count++],&normal[n2-1],sizeof(Vertex3f));
+			memcpy(&normal_list[normal_list_count++],&normal[n3-1],sizeof(Vertex3f));
 
-			//Liste des UV de l'objet
-			memcpy(&texture_list[texture_list_count++],&texture[t1-1],sizeof(Vertex2f));
-			memcpy(&texture_list[texture_list_count++],&texture[t2-1],sizeof(Vertex2f));
-			memcpy(&texture_list[texture_list_count++],&texture[t3-1],sizeof(Vertex2f));
+			if (texture_count!=0)
+			{
+				//Liste des UV de l'objet
+				memcpy(&texture_list[texture_list_count++],&texture[t1-1],sizeof(Vertex2f));
+				memcpy(&texture_list[texture_list_count++],&texture[t2-1],sizeof(Vertex2f));
+				memcpy(&texture_list[texture_list_count++],&texture[t3-1],sizeof(Vertex2f));
+			}
 			break;
 
 		default:

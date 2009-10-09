@@ -87,9 +87,8 @@ void Mesh::Render()
 		glBindBuffer(GL_ARRAY_BUFFER,_vbo[TEXTURE_DATA]);
 		glTexCoordPointer(2,GL_FLOAT,0,0);
 	}
-
 	glDrawArrays(GL_TRIANGLES,0,_n);
-
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);

@@ -11,7 +11,7 @@ TestFrame::TestFrame() : IViewable() {
 	float width = Engine::GetInstance().GetScreenWidth();
 	float height = Engine::GetInstance().GetScreenHeight();
 
-	_camera->SetEyePosition(0.0,3.0,10.0);
+	_camera->SetEyePosition(0.0,3.0,30.0);
 	_camera->SetVolumeView(-width/100.0,width/100.0,height/100.0,-height/100.0,0.00001,10000.0);
 	_camera->SetLookAtPosition(0.0,0.0,0.0);
 	_camera->Zoom(1.0);
@@ -71,35 +71,42 @@ bool TestFrame::AnimationFinished()
 
 void TestFrame::PreRender()
 {
-	_camera->SetEyePosition(0.0,_ycam,10.0);
+	_camera->SetEyePosition(0.0,_ycam,30.0);
 }
 
 void TestFrame::Render()
 {
-	glEnable(GL_BLEND);
+	glDisable(GL_BLEND);
 	glColor4f(1.0,1.0,1.0,1.0);
 	glPushMatrix();
 		glRotatef(Engine::GetInstance().GetCurrentTime()*360.0/16800.0,0.0,1.0,0.0);
-		float lx = 4.0*cos(Engine::GetInstance().GetCurrentTime()*6.28/1000.0);
-		float ly = 4.0*sin(Engine::GetInstance().GetCurrentTime()*6.28/1000.0);
-		float l0[] = {lx,10.0,ly,1.0};
+		float lx = 5.0*cos(Engine::GetInstance().GetCurrentTime()*6.28/10000.0);
+		float ly = 5.0*sin(Engine::GetInstance().GetCurrentTime()*6.28/10000.0);
+		float l0[] = {lx,0.0,ly,1.0};
 		glLightfv(GL_LIGHT0,GL_POSITION,l0);
+		glPushMatrix();
+			glDisable(GL_LIGHTING);
+			glTranslatef(lx,0.0,ly);
+			glColor4f(1.0,1.0,1.0,1.0);
+			glutSolidSphere(0.2,32,32);
+			glEnable(GL_LIGHTING);
+		glPopMatrix();
 
-		glColor4f(1.0,1.0,1.0,1.0);
+		glColor4f(0.2,0.2,0.2,1.0);
 		//glEnable(GL_TEXTURE_2D);
 		glDisable(GL_TEXTURE_2D);
 		//glBindTexture(GL_TEXTURE_2D,_textures[0]);
 
-		float spec[] = {1.0,0.0,1.0,1.0};
+		float spec[] = {1.0,1.0,1.0,1.0};
 		glMaterialfv(GL_FRONT,GL_SPECULAR,spec);
 		glMateriali(GL_FRONT,GL_SHININESS,128);
 		glEnable(GL_COLOR_MATERIAL);
 
+		glFrontFace(GL_CCW);
 		_obj->Render();
-		//glDisable(GL_TEXTURE_2D);
-
-		glColor4f(0.07,0.5,0.99,0.5);
-		//glutSolidSphere(3.0,32,32);
+		glFrontFace(GL_CW);
+		_obj->Render();
+		glDisable(GL_COLOR_MATERIAL);
 
 	glPopMatrix();
 }
@@ -130,15 +137,15 @@ void TestFrame::KeyPressed(char key)
 	{
 		_y+=0.02;
 	}
-	_camera->SetEyePosition(0.0,_ycam,10.0);
+	_camera->SetEyePosition(0.0,_ycam,3.0);
 	_camera->Move(_x,_y,0.0);
 }
 
 void TestFrame::ButtonPressed(unsigned char button, int x, int y)
 {
-	if (button==3 && _current_zoom<1.0)
+	if (button==3 && _current_zoom<1.6)
 	{
-		Engine::GetInstance().Release();
+		_current_zoom+=0.02;
 	} else if (button==4 && _current_zoom>0.05)
 	{
 		_current_zoom-=0.02;
