@@ -98,10 +98,6 @@ bool OBJ3DObject::Load(const char *filename)
 						&normal[normal_count].x,
 						&normal[normal_count].y,
 						&normal[normal_count].z);
-				printf("N:%f %f %f\n",
-						normal[normal_count].x,
-						normal[normal_count].y,
-						normal[normal_count].z);
 				normal_count++;
 
 			} else if (buffer_line[1]=='t')
@@ -113,6 +109,13 @@ bool OBJ3DObject::Load(const char *filename)
 					texture[texture_count].v = 1.0-texture[texture_count].v;
 				texture_count++;
 			}
+			break;
+
+		case 'o':
+			//Un nouvel objet est detecte
+			char name[32];
+			sscanf(buffer_line+2,"%s",name);
+			printf("Nouvel objet:%s\n",name);
 			break;
 
 		case 'f':

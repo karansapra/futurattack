@@ -31,6 +31,7 @@ class Mesh: public IRenderable {
 	bool _vertex;
 	bool _texcoord;
 	int _n;
+	char _mesh_name[MAX_MESH_NAME_LENGTH];
 
 	Vertex3f * _vertex_list;
 	Vertex3f * _normal_list;
@@ -38,6 +39,7 @@ class Mesh: public IRenderable {
 
 public:
 	Mesh();
+	Mesh(const char *name);
 	virtual ~Mesh();
 
 	void SetVertexList(Vertex3f * vertex_list, int n);

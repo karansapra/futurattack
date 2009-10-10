@@ -8,12 +8,21 @@
 #include "Mesh.h"
 
 Mesh::Mesh() {
-	// TODO Auto-generated constructor stub
 	_vertex=false;
 	_normal=false;
 	_texcoord=false;
 	_already_built=false;
 	_n=-1;
+	sprintf(_mesh_name,"NoName");
+}
+
+Mesh::Mesh(const char * name) {
+	_vertex=false;
+	_normal=false;
+	_texcoord=false;
+	_already_built=false;
+	_n=-1;
+	sprintf(_mesh_name,"%s",name);
 }
 
 Mesh::~Mesh() {

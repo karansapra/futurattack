@@ -76,12 +76,12 @@ void TestFrame::PreRender()
 
 void TestFrame::Render()
 {
-	glDisable(GL_BLEND);
+	glEnable(GL_BLEND);
 	glColor4f(1.0,1.0,1.0,1.0);
 	glPushMatrix();
 		glRotatef(Engine::GetInstance().GetCurrentTime()*360.0/16800.0,0.0,1.0,0.0);
-		float lx = 5.0*cos(Engine::GetInstance().GetCurrentTime()*6.28/10000.0);
-		float ly = 5.0*sin(Engine::GetInstance().GetCurrentTime()*6.28/10000.0);
+		float lx = 5.0*cos(Engine::GetInstance().GetCurrentTime()*6.28/1000.0);
+		float ly = 5.0*sin(Engine::GetInstance().GetCurrentTime()*6.28/1000.0);
 		float l0[] = {lx,0.0,ly,1.0};
 		glLightfv(GL_LIGHT0,GL_POSITION,l0);
 		glPushMatrix();
@@ -92,14 +92,14 @@ void TestFrame::Render()
 			glEnable(GL_LIGHTING);
 		glPopMatrix();
 
-		glColor4f(0.2,0.2,0.2,1.0);
+		glColor4f(0.6,0.6,0.6,1.0);
 		//glEnable(GL_TEXTURE_2D);
 		glDisable(GL_TEXTURE_2D);
 		//glBindTexture(GL_TEXTURE_2D,_textures[0]);
 
-		float spec[] = {1.0,1.0,1.0,1.0};
+		float spec[] = {0.8,0.8,0.8,1.0};
 		glMaterialfv(GL_FRONT,GL_SPECULAR,spec);
-		glMateriali(GL_FRONT,GL_SHININESS,128);
+		glMateriali(GL_FRONT,GL_SHININESS,158);
 		glEnable(GL_COLOR_MATERIAL);
 
 		glFrontFace(GL_CCW);
