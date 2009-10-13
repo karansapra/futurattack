@@ -13,12 +13,6 @@ void _display_func()
 	e->GLDisplay();
 }
 
-void _timer_func(int id)
-{
-	static Engine * e = &Engine::GetInstance();
-	e->GLTimer();
-}
-
 void _kb_func(unsigned char key, int a, int b)
 {
 	static Engine * e = &Engine::GetInstance();
@@ -29,6 +23,10 @@ void _mouse_func(int button, int state, int x, int y)
 {
 	static Engine * e = &Engine::GetInstance();
 	e->GLMouse(button,state,x,y);
+}
+
+void _exit_func()
+{
 }
 
 //Pour créer le Singleton, on init a NULL, pour le creer lors
@@ -46,6 +44,7 @@ Engine::Engine() : BaseObject()
 	_ikeyboard = NULL;
 	_imouse = NULL;
 	_dbg_message_time = 0.0;
+	_run = true;
 }
 
 void Engine::InitAll(int *argc, char **argv, int resx, int resy, bool double_buffered, bool fullscreen)
@@ -85,8 +84,24 @@ void Engine::Run()
 	}
 
 	glutDisplayFunc(_display_func);
-	glutTimerFunc(ENGINE_STEP,_timer_func,0);
-	glutMainLoop();
+	//glutTimerFunc(ENGINE_STEP,_timer_func,0);
+
+	while (_run)
+	{
+		usleep(1000*ENGINE_STEP);
+
+		_ms_time += (float)ENGINE_STEP;
+
+		//Effectue tous les calculs et changements de scene du gameplay, s'il existe
+		if (_igameplay!=NULL)
+			_igameplay->GameplayProcessing();
+
+		if (_dbg_message_time>0.0)
+			_dbg_message_time -= (float)ENGINE_STEP;
+
+		glutPostRedisplay();
+		glutMainLoopEvent();
+	}
 }
 
 inline void Engine::GLDisplay()
@@ -158,21 +173,6 @@ inline void Engine::GLDisplay()
 	glutSwapBuffers();
 }
 
-inline void Engine::GLTimer()
-{
-	_ms_time += (float)ENGINE_STEP;
-
-	//Effectue tous les calculs et changements de scene du gameplay, s'il existe
-	if (_igameplay!=NULL)
-		_igameplay->GameplayProcessing();
-
-	if (_dbg_message_time>0.0)
-		_dbg_message_time -= (float)ENGINE_STEP;
-
-	glutPostRedisplay();
-	glutTimerFunc(ENGINE_STEP,_timer_func,0);
-}
-
 void Engine::SetCurrentIViewable(IViewable & iviewable)
 {
 	_iviewable = &iviewable;
@@ -229,10 +229,6 @@ inline void Engine::GLMouse(int button, int state, int x, int y)
 void Engine::SetCurrentIMouse(IMouse & imouse)
 {
 	_imouse = &imouse;
-}
-
-void Engine::Release()
-{
 }
 
 Engine::~Engine()

@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <GL/freeglut.h>
+#include <unistd.h>
 #include "BaseObject.h"
 #include "IViewable.h"
 #include "IGameplay.h"
@@ -19,7 +20,7 @@
 
 //Pour permettre le rendu des frames
 void _display_func();
-void _timer_func(int id);
+void _exit_func();
 
 //Pour les IKeyboard
 void _kb_func(unsigned char key, int a, int b);
@@ -45,6 +46,8 @@ class Engine: public BaseObject {
 	float _dbg_message_time;
 	char _dbg_message[MAX_DBG_MESSAGE_LENGTH];
 
+
+
 public:
 	static Engine & GetInstance();
 
@@ -66,13 +69,12 @@ public:
 	inline void GLDisplay();
 	inline void GLKeyboard(char key);
 	inline void GLMouse(int button, int state, int x, int y);
-	inline void GLTimer();
 
 	const char * ToString();
 
-	void Release();
-
 	virtual ~Engine();
+
+	bool _run;
 };
 
 #endif /* ENGINE_H_ */
