@@ -14,7 +14,10 @@
 #include <GL/freeglut.h>
 #include <GL/glx.h>
 #include <GL/glext.h>
+
 #include "I3DObject.h"
+#include "IMaterial.h"
+#include "StandardMaterial.h"
 #include "Constants.h"
 #include "Mesh.h"
 
@@ -26,6 +29,10 @@ class OBJ3DObject: public I3DObject {
 
 	Mesh * _meshes[OBJ_FILE_MAX_MESHES];
 	int _nmeshes;
+
+	IMaterial * _parsed_materials[OBJ_FILE_MAX_MATERIALS];
+	int _nparsed_materials;
+	void _parse_mtl_file(char * file);
 
 public:
 	OBJ3DObject();

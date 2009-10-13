@@ -10,10 +10,22 @@
 
 #include "BaseObject.h"
 
+struct RGB
+{
+	float R;
+	float G;
+	float B;
+};
+
 class IMaterial: public BaseObject {
+protected:
+	char _material_name[128];
+
 public:
 	IMaterial();
 	virtual ~IMaterial();
+
+	char * GetMaterialName();
 
 	virtual void Apply()=0;
 };

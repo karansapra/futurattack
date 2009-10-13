@@ -34,13 +34,13 @@ TestFrame::TestFrame() : IViewable() {
 	glLightfv(GL_LIGHT0,GL_AMBIENT,ambient);
 	glLightfv(GL_LIGHT0,GL_DIFFUSE,ambient);
 
-	if (_sraster->Load("/home/clement/Bureau/Logo2.bmp"))
+	if (_sraster->Load("/home/clement/Bureau/Missile_Circle.bmp"))
 	{
 		glEnable(GL_TEXTURE_2D);
 		glGenTextures(1,_textures);
 
 		glBindTexture(GL_TEXTURE_2D,_textures[0]);
-		glTexImage2D(GL_TEXTURE_2D,0,_sraster->GetBPP()/8,_sraster->GetWidth(),_sraster->GetHeight(),0,GL_RGB,GL_UNSIGNED_BYTE,_sraster->GetPixelsData());
+		glTexImage2D(GL_TEXTURE_2D,0,_sraster->GetBPP()/8,_sraster->GetWidth(),_sraster->GetHeight(),0,GL_RGBA,GL_UNSIGNED_BYTE,_sraster->GetPixelsData());
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
@@ -93,9 +93,8 @@ void TestFrame::Render()
 		glPopMatrix();
 
 		glColor4f(0.6,0.6,0.6,1.0);
-		//glEnable(GL_TEXTURE_2D);
-		glDisable(GL_TEXTURE_2D);
-		//glBindTexture(GL_TEXTURE_2D,_textures[0]);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D,_textures[0]);
 
 		float spec[] = {0.8,0.8,0.8,1.0};
 		glMaterialfv(GL_FRONT,GL_SPECULAR,spec);

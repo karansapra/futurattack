@@ -15,3 +15,10 @@ IMaterial::IMaterial() {
 IMaterial::~IMaterial() {
 	// TODO Auto-generated destructor stub
 }
+
+char *IMaterial::GetMaterialName()
+{
+	return _material_name;
+}
+
+

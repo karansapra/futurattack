@@ -13,6 +13,7 @@ Mesh::Mesh() {
 	_texcoord=false;
 	_already_built=false;
 	_n=-1;
+	_material = NULL;
 	sprintf(_mesh_name,"NoName");
 }
 
@@ -22,6 +23,7 @@ Mesh::Mesh(const char * name) {
 	_texcoord=false;
 	_already_built=false;
 	_n=-1;
+	_material = NULL;
 	sprintf(_mesh_name,"%s",name);
 }
 
@@ -33,7 +35,7 @@ void Mesh::SetVertexList(Vertex3f *vertex_list, int n)
 {
 	if (_already_built || (n!=_n && _n!=-1) || _vertex)
 		return;
-	printf("Vertices added\n");
+	printf("%s:Vertices added : %d\n",_mesh_name,n);
 	_n = n;
 	_vertex = true;
 	_vertex_list = new Vertex3f[n];
@@ -45,7 +47,7 @@ void Mesh::SetNormalList(Vertex3f *normal_list, int n)
 	if (_already_built || (n!=_n && _n!=-1) || _normal)
 		return;
 
-	printf("Normals added\n");
+	printf("%s:Normals added : %d\n",_mesh_name,n);
 	_n = n;
 	_normal = true;
 	_normal_list = new Vertex3f[n];
@@ -57,11 +59,19 @@ void Mesh::SetTexCoordList(Vertex2f *texcoord_list, int n)
 	if (_already_built || (n!=_n && _n!=-1) || _texcoord)
 		return;
 
-	printf("Texcoords added\n");
+	printf("%s:Texcoords added : %d\n",_mesh_name,n);
 	_n = n;
 	_texcoord = true;
 	_texcoord_list = new Vertex2f[n];
 	memcpy(_texcoord_list,texcoord_list,n*sizeof(Vertex2f));
+}
+
+void Mesh::SetMaterial(IMaterial *material, bool delete_last)
+{
+	if (delete_last && _material!=NULL)
+		delete _material;
+
+	_material = material;
 }
 
 const char *Mesh::ToString()
@@ -96,6 +106,10 @@ void Mesh::Render()
 		glBindBuffer(GL_ARRAY_BUFFER,_vbo[TEXTURE_DATA]);
 		glTexCoordPointer(2,GL_FLOAT,0,0);
 	}
+
+	if (_material!=NULL)
+		_material->Apply();
+
 	glDrawArrays(GL_TRIANGLES,0,_n);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
