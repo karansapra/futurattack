@@ -15,9 +15,9 @@ class Node {
 	static Node * _refcounter[MAX_NODES];
 	static int _nref;
 
-	Node(int xx, int yy);
 
 public:
+	Node(int xx, int yy);
 	~Node();
 
 	//Mem managment

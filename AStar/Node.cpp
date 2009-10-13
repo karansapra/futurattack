@@ -32,7 +32,8 @@ Node::~Node() {
 Node *Node::CreateNode(int xx, int yy)
 {
 	Node * n = new Node(xx,yy);
-	_refcounter[_nref++];
+	_refcounter[_nref]=n;
+	_nref++;
 	return n;
 }
 
@@ -46,6 +47,8 @@ void Node::ReleaseAll()
 	for (int i=0;i<_nref;i++)
 		if (_refcounter[i]!=NULL)
 			delete _refcounter[i];
+
+	_nref = 0;
 }
 
 

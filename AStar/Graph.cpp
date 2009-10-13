@@ -46,9 +46,6 @@ Path *Graph::FindPath(Node *start, Node *end)
 		Node * x = _open_list.FindByFScore();
 		if (*x==*end)
 		{
-			_open_list.Clear();
-			_closed_list.Clear();
-
 			Path * path = new Path;
 			path->ncoords = 0;
 			Node * n = x;
@@ -59,8 +56,12 @@ Path *Graph::FindPath(Node *start, Node *end)
 				path->ncoords++;
 				n = n->parent;
 			} while (n!=NULL);
+
 			_open_list.Clear();
 			_closed_list.Clear();
+
+			Node::ReleaseAll();
+
 			return path;
 		}
 
@@ -101,6 +102,9 @@ Path *Graph::FindPath(Node *start, Node *end)
 
 	_open_list.Clear();
 	_closed_list.Clear();
+
+	Node::ReleaseAll();
+
 	return NULL;
 }
 
@@ -151,8 +155,12 @@ void Graph::FindPathAndSavePPM(Node * start, Node * end, const char * ppm_file)
 				}
 			}
 			fclose(f);
+
 			_open_list.Clear();
 			_closed_list.Clear();
+
+			Node::ReleaseAll();
+			return;
 		}
 
 		_open_list.Delete(x);
@@ -192,4 +200,5 @@ void Graph::FindPathAndSavePPM(Node * start, Node * end, const char * ppm_file)
 
 	_open_list.Clear();
 	_closed_list.Clear();
+	Node::ReleaseAll();
 }
