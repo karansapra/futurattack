@@ -24,17 +24,17 @@ void CallAll()
 	g->SetValue(10,3,10);
 	g->SetValue(10,3,10);
 	Node start(0,0);
-	Node end(31,10);
+	Node end(31,15);
 	g->SetValue(31,13,10);
 	g->SetValue(30,14,10);
 	g->SetValue(29,14,10);
 	g->SetValue(28,15,10);
+	g->SetValue(28,16,10);
+	g->SetValue(28,17,10);
+	g->SetValue(28,18,10);
 	g->SetValue(31,14,10);
 	g->SetValue(31,16,10);
-	for (int i=0;i<10000;i++)
-	{
-		g->FindPath(&start,&end);
-	}
+	g->FindPathAndSavePPM(&start,&end,"/home/clement/Bureau/path.ppm");
 	delete g;
 }
 

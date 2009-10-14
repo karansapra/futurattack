@@ -140,6 +140,9 @@ void Graph::FindPathAndSavePPM(Node * start, Node * end, const char * ppm_file)
 				n = n->parent;
 			} while (n!=NULL);
 
+			SetValue(start->x,start->y,-200);
+			SetValue(end->x,end->y,-200);
+
 			int v;
 			for (int yy=0;yy<_height*30;yy++)
 			{
@@ -150,11 +153,19 @@ void Graph::FindPathAndSavePPM(Node * start, Node * end, const char * ppm_file)
 						fprintf(f,"0 0 0 ");
 					else if (v==-100)
 						fprintf(f,"255 0 0 ");
+					else if (v==-200)
+						fprintf(f,"0 255 0 ");
 					else
 						fprintf(f,"255 255 255 ");
 				}
 			}
 			fclose(f);
+
+			for (int i = 0 ; i<_width*_height;i++)
+			{
+				if (_vals[i]<0)
+					_vals[i]=0;
+			}
 
 			_open_list.Clear();
 			_closed_list.Clear();
