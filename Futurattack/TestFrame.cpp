@@ -17,7 +17,7 @@ TestFrame::TestFrame() : IViewable() {
 	_camera->Zoom(1.0);
 
 	_current_zoom = 1.0;
-	_ycam = 0.0;
+	_ycam = 10.0;
 
 	_x = 0.0;
 	_y = 0.0;
@@ -30,6 +30,9 @@ TestFrame::TestFrame() : IViewable() {
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
 	float ambient[] = {1.0,1.0,1.0,1.0};
+
+	float l0[] = {0.0,10.0,0.0,1.0};
+	glLightfv(GL_LIGHT0,GL_POSITION,l0);
 
 	glLightfv(GL_LIGHT0,GL_AMBIENT,ambient);
 	glLightfv(GL_LIGHT0,GL_DIFFUSE,ambient);
@@ -53,14 +56,14 @@ TestFrame::TestFrame() : IViewable() {
 
 	Engine::GetInstance().ShowDebugMessage("Version Alpha Release 0.1\nC.JACOB");
 
-	//Lumiere
-	_obj = new OBJ3DObject();
-	_obj->SwitchTextureOrigin();
-	_obj->Load("/home/clement/Bureau/Case.obj");
+	//Chargement des cases du plateau
+	_base_case = new OBJ3DObject();
+	_base_case->SwitchTextureOrigin();
+	_base_case->Load("/home/clement/Bureau/Case2.obj");
 }
 
 TestFrame::~TestFrame() {
-	delete _obj;
+	delete _base_case;
 }
 
 bool TestFrame::AnimationFinished()
@@ -75,36 +78,28 @@ void TestFrame::PreRender()
 
 void TestFrame::Render()
 {
-	glEnable(GL_BLEND);
 	glColor4f(1.0,1.0,1.0,1.0);
 	glPushMatrix();
 		glRotatef(Engine::GetInstance().GetCurrentTime()*360.0/16800.0,0.0,1.0,0.0);
-		float lx = 5.0*cos(Engine::GetInstance().GetCurrentTime()*6.28/1000.0);
-		float ly = 5.0*sin(Engine::GetInstance().GetCurrentTime()*6.28/1000.0);
-		float l0[] = {lx,0.0,ly,1.0};
-		glLightfv(GL_LIGHT0,GL_POSITION,l0);
-		glPushMatrix();
-			glDisable(GL_LIGHTING);
-			glTranslatef(lx,0.0,ly);
-			glColor4f(1.0,1.0,1.0,1.0);
-			glutSolidSphere(0.2,32,32);
-			glEnable(GL_LIGHTING);
-		glPopMatrix();
 
-		glColor4f(0.6,0.6,0.6,1.0);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D,_textures[0]);
 
-		float spec[] = {0.8,0.8,0.8,1.0};
-		glMaterialfv(GL_FRONT,GL_SPECULAR,spec);
-		glMateriali(GL_FRONT,GL_SHININESS,158);
-		glEnable(GL_COLOR_MATERIAL);
-
 		glFrontFace(GL_CCW);
-		_obj->Render();
-		glFrontFace(GL_CW);
-		_obj->Render();
-		glDisable(GL_COLOR_MATERIAL);
+		glTranslatef(0.0,0.0,-5.0*2.5/2.0);
+		for (int y=0;y<5;y++)
+		{
+			glTranslatef(0.0,0.0,2.5);
+			glPushMatrix();
+			glTranslatef(-10.0*2.5/2.0,0.0,0.0);
+			for (int x=0;x<10;x++)
+			{
+				glTranslatef(2.5,0.0,0.0);
+				_base_case->Render();
+			}
+			glPopMatrix();
+		}
+
 
 	glPopMatrix();
 }
@@ -141,7 +136,7 @@ void TestFrame::KeyPressed(char key)
 
 void TestFrame::ButtonPressed(unsigned char button, int x, int y)
 {
-	if (button==3 && _current_zoom<1.6)
+	if (button==3 && _current_zoom<1.0)
 	{
 		_current_zoom+=0.02;
 	} else if (button==4 && _current_zoom>0.05)

@@ -26,7 +26,7 @@ class TestFrame: public IViewable, public IKeyboard, public IMouse {
 	BitmapTexture * _ground;
 	GLuint _textures[2];
 
-	OBJ3DObject * _obj;
+	OBJ3DObject * _base_case;
 
 public:
 	TestFrame();

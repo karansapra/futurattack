@@ -17,6 +17,14 @@ struct RGB
 	float B;
 };
 
+struct RGBA
+{
+	float R;
+	float G;
+	float B;
+	float A;
+};
+
 class IMaterial: public BaseObject {
 protected:
 	char _material_name[128];
@@ -29,7 +37,9 @@ public:
 
 	virtual void Apply()=0;
 
-	RGB ambient;
+	RGBA ambient;
+	RGBA specular;
+	int shine;
 };
 
 #endif /* IMATERIAL_H_ */

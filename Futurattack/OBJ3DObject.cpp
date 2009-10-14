@@ -65,13 +65,51 @@ void OBJ3DObject::_parse_mtl_file(char *file)
 			}
 			break;
 
+		case 'N':
+			if (buffer_line[1]=='s' && _nparsed_materials>0)
+			{
+				//Shine
+				if (_parsed_materials[_nparsed_materials-1]!=NULL)
+				{
+					float shine;
+					sscanf(buffer_line,"Ns %f",&shine);
+					shine = shine*255.0/1000.0;
+					((StandardMaterial*)_parsed_materials[_nparsed_materials-1])->shine = shine;
+				}
+			}
+			break;
+
+		case 'd':
+			if (_nparsed_materials>0)
+			{
+				//Alpha
+				if (_parsed_materials[_nparsed_materials-1]!=NULL)
+				{
+					float alpha;
+					sscanf(buffer_line,"d %f",&alpha);
+					((StandardMaterial*)_parsed_materials[_nparsed_materials-1])->ambient.A = alpha;
+				}
+			}
+			break;
+
 		case 'K':
-			if (buffer_line[1]=='d' && _nparsed_materials>0)
+			if (buffer_line[1]=='s' && _nparsed_materials>0)
+			{
+				//Specular color
+				if (_parsed_materials[_nparsed_materials-1]!=NULL)
+				{
+					RGBA specular;
+					specular.A = 1.0;
+					sscanf(buffer_line,"Kd %f %f %f",&specular.R,&specular.G,&specular.B);
+					((StandardMaterial*)_parsed_materials[_nparsed_materials-1])->specular = specular;
+				}
+			} else if (buffer_line[1]=='d' && _nparsed_materials>0)
 			{
 				//Ambient color
 				if (_parsed_materials[_nparsed_materials-1]!=NULL)
 				{
-					RGB ambient;
+					RGBA ambient;
+					ambient.A = 1.0;
 					sscanf(buffer_line,"Kd %f %f %f",&ambient.R,&ambient.G,&ambient.B);
 					((StandardMaterial*)_parsed_materials[_nparsed_materials-1])->ambient = ambient;
 				}
