@@ -28,6 +28,8 @@ public:
 	char * GetMaterialName();
 
 	virtual void Apply()=0;
+
+	RGB ambient;
 };
 
 #endif /* IMATERIAL_H_ */

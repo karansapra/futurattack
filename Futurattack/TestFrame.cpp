@@ -56,8 +56,7 @@ TestFrame::TestFrame() : IViewable() {
 	//Lumiere
 	_obj = new OBJ3DObject();
 	_obj->SwitchTextureOrigin();
-	_obj->Load("/home/clement/Bureau/untitled.obj");
-
+	_obj->Load("/home/clement/Bureau/Case.obj");
 }
 
 TestFrame::~TestFrame() {

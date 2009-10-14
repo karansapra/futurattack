@@ -15,8 +15,6 @@
 class StandardMaterial: public IMaterial {
 
 public:
-	RGB ambient;
-
 	StandardMaterial(const char * material_name);
 	virtual ~StandardMaterial();
 
