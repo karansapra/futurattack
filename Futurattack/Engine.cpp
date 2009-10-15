@@ -55,15 +55,37 @@ void Engine::InitAll(int *argc, char **argv, int resx, int resy, bool double_buf
 	/*
 	 * INITIALISATION D'OPENGL
 	 */
-	glutInit(argc, argv);
-	if (double_buffered)
-		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
-	else
-		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
-	glutInitWindowSize(resx,resy);
-	glutCreateWindow("Futurattack - RJ Game Studio - 2009");
-	glutKeyboardFunc(_kb_func);
-	glutMouseFunc(_mouse_func);
+	GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
+	XVisualInfo * visual_info;
+	Colormap colormap;
+	XSetWindowAttributes window_attributes;
+
+	_dpy = XOpenDisplay(0);
+	if (_dpy==NULL)
+	{
+		printf("Can't open X display\n");
+		return;
+	}
+
+	_root = DefaultRootWindow(_dpy);
+	visual_info = glXChooseVisual(_dpy,0,att);
+	if (visual_info==NULL)
+	{
+		printf("Your graphics card is probably unsupported\n");
+		return;
+	}
+
+	colormap = XCreateColormap(_dpy,_root,visual_info->visual,AllocNone);
+
+	window_attributes.colormap = colormap;
+	window_attributes.event_mask = ExposureMask | KeyPressMask | PointerMotionMask | ButtonPressMask;
+
+	_window = XCreateWindow(_dpy,_root,0,0,resx,resy,0,visual_info->depth,InputOutput,visual_info->visual,CWColormap|CWEventMask,&window_attributes);
+	XMapWindow(_dpy,_window);
+	XStoreName(_dpy,_window,"Futurattack - RJ Game Studio - 2009");
+	_glx_context = glXCreateContext(_dpy,visual_info,NULL,GL_TRUE);
+	glXMakeCurrent(_dpy,_window,_glx_context);
+
 	glClearColor(0.0,0.0,0.0,1.0);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
@@ -83,14 +105,20 @@ void Engine::Run()
 		return;
 	}
 
-	glutDisplayFunc(_display_func);
-	//glutTimerFunc(ENGINE_STEP,_timer_func,0);
-
 	while (_run)
 	{
 		usleep(1000*ENGINE_STEP);
-
 		_ms_time += (float)ENGINE_STEP;
+
+		if (true == XCheckMaskEvent(_dpy,KeyPressMask ,&_xevent))
+			_kb_func(_xevent.xkey.keycode,0,0);
+		else if (true == XCheckMaskEvent(_dpy,PointerMotionMask ,&_xevent))
+		{
+			_mouse_func(-1,0,_xevent.xmotion.x,_xevent.xmotion.y);
+		} else if (true == XCheckMaskEvent(_dpy, ButtonPressMask ,&_xevent))
+		{
+			_mouse_func(_xevent.xbutton.button,0,_xevent.xbutton.x,_xevent.xbutton.y);
+		}
 
 		//Effectue tous les calculs et changements de scene du gameplay, s'il existe
 		if (_igameplay!=NULL)
@@ -99,8 +127,8 @@ void Engine::Run()
 		if (_dbg_message_time>0.0)
 			_dbg_message_time -= (float)ENGINE_STEP;
 
-		glutPostRedisplay();
-		glutMainLoopEvent();
+		_display_func();
+		glXSwapBuffers(_dpy,_window);
 	}
 }
 
@@ -153,7 +181,8 @@ inline void Engine::GLDisplay()
 			glEnd();
 			glColor4f(1.0,1.0,1.0,1.0);
 			glRasterPos2f(10.0, _posy_dbg-30.0);
-			glutBitmapString(GLUT_BITMAP_HELVETICA_12,(const unsigned char *)_dbg_message);
+
+			//glutBitmapString(GLUT_BITMAP_HELVETICA_12,(const unsigned char *)_dbg_message);
 
 			glEnable(GL_TEXTURE_2D);
 		    glEnable(GL_DEPTH_TEST);
@@ -169,8 +198,6 @@ inline void Engine::GLDisplay()
 
 	//---------------
 
-
-	glutSwapBuffers();
 }
 
 void Engine::SetCurrentIViewable(IViewable & iviewable)

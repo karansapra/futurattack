@@ -32,7 +32,7 @@ public:
 int main(int argc, char ** argv)
 {
 	Engine * e = &Engine::GetInstance();
-	e->InitAll(&argc,argv);
+	e->InitAll(&argc,argv,1280,800,true,true);
 	e->SetCurrentIGameplay(*new MyGameplay());
 	e->Run();
 	return 0;

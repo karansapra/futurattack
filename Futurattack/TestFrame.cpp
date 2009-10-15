@@ -111,24 +111,28 @@ const char *TestFrame::ToString()
 
 void TestFrame::KeyPressed(char key)
 {
-	if (key=='z')
+	//printf("key:%x ==> %c\n",key,key);
+	if (key==KEYCODE_Z)
 	{
 		_ycam+=0.2;
-	} else if (key=='s')
+	} else if (key==KEYCODE_S)
 	{
 		_ycam-=0.2;
-	} else if (key=='l')
+	} else if (key==KEYCODE_RIGHT)
 	{
 		_x+=0.02;
-	} else if (key=='j')
+	} else if (key==KEYCODE_LEFT)
 	{
 		_x-=0.02;
-	} else if (key=='k')
+	} else if (key==KEYCODE_DOWN)
 	{
 		_y-=0.02;
-	} else if (key=='i')
+	} else if (key==KEYCODE_UP)
 	{
 		_y+=0.02;
+	} else if (key==KEYCODE_Q)
+	{
+		exit(0);
 	}
 	_camera->SetEyePosition(0.0,_ycam,3.0);
 	_camera->Move(_x,_y,0.0);
@@ -136,10 +140,10 @@ void TestFrame::KeyPressed(char key)
 
 void TestFrame::ButtonPressed(unsigned char button, int x, int y)
 {
-	if (button==3 && _current_zoom<1.0)
+	if (button==MOUSE_CENTER_UP && _current_zoom<1.0)
 	{
 		_current_zoom+=0.02;
-	} else if (button==4 && _current_zoom>0.05)
+	} else if (button==MOUSE_CENTER_DOWN && _current_zoom>0.05)
 	{
 		_current_zoom-=0.02;
 	}

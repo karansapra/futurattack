@@ -10,6 +10,7 @@
 #ifndef TESTFRAME_H_
 #define TESTFRAME_H_
 
+#include <stdlib.h>
 #include <math.h>
 #include "IViewable.h"
 #include "IKeyboard.h"

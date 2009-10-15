@@ -9,8 +9,9 @@
 #define ENGINE_H_
 
 #include <stdio.h>
-#include <GL/freeglut.h>
 #include <unistd.h>
+#include <X11/Xlib.h>
+#include <GL/glx.h>
 #include "BaseObject.h"
 #include "IViewable.h"
 #include "IGameplay.h"
@@ -26,6 +27,8 @@ void _exit_func();
 void _kb_func(unsigned char key, int a, int b);
 
 void _mouse_func(int button, int state, int x, int y);
+
+
 
 class Engine: public BaseObject {
 	Engine();
@@ -47,6 +50,16 @@ class Engine: public BaseObject {
 	char _dbg_message[MAX_DBG_MESSAGE_LENGTH];
 
 
+	/*
+	 *
+	 * WINDOW MANAGMENT
+	 *
+	 */
+	Display * 		_dpy;
+	Window 			_root;
+	Window 			_window;
+	GLXContext		_glx_context;
+	XEvent			_xevent;
 
 public:
 	static Engine & GetInstance();
