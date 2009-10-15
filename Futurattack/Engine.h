@@ -64,7 +64,7 @@ class Engine: public BaseObject {
 public:
 	static Engine & GetInstance();
 
-	void InitAll(int * argc, char ** argv,int resx=640, int resy=480, bool double_buffered=true, bool fullscreen=false);
+	void InitAll(int * argc, char ** argv,int resx=640, int resy=480, bool fullscreen=false);
 	void Run();
 
 	float GetCurrentTime();

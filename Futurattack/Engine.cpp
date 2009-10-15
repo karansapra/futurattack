@@ -47,7 +47,7 @@ Engine::Engine() : BaseObject()
 	_run = true;
 }
 
-void Engine::InitAll(int *argc, char **argv, int resx, int resy, bool double_buffered, bool fullscreen)
+void Engine::InitAll(int *argc, char **argv, int resx, int resy,bool fullscreen)
 {
 	_resx = resx;
 	_resy = resy;
@@ -82,6 +82,28 @@ void Engine::InitAll(int *argc, char **argv, int resx, int resy, bool double_buf
 
 	_window = XCreateWindow(_dpy,_root,0,0,resx,resy,0,visual_info->depth,InputOutput,visual_info->visual,CWColormap|CWEventMask,&window_attributes);
 	XMapWindow(_dpy,_window);
+
+	/*
+	 * Prise en charge du mode plein ecran
+	 */
+	if (fullscreen)
+	{
+		XEvent xev;
+		Atom wm_state = XInternAtom(_dpy, "_NET_WM_STATE", False);
+		Atom fullscreen = XInternAtom(_dpy, "_NET_WM_STATE_FULLSCREEN", False);
+
+		memset(&xev, 0, sizeof(xev));
+		xev.type = ClientMessage;
+		xev.xclient.window = _window;
+		xev.xclient.message_type = wm_state;
+		xev.xclient.format = 32;
+		xev.xclient.data.l[0] = 1;
+		xev.xclient.data.l[1] = fullscreen;
+		xev.xclient.data.l[2] = 0;
+
+		XSendEvent(_dpy, _root, False,SubstructureNotifyMask, &xev);
+	}
+
 	XStoreName(_dpy,_window,"Futurattack - RJ Game Studio - 2009");
 	_glx_context = glXCreateContext(_dpy,visual_info,NULL,GL_TRUE);
 	glXMakeCurrent(_dpy,_window,_glx_context);
@@ -110,14 +132,22 @@ void Engine::Run()
 		usleep(1000*ENGINE_STEP);
 		_ms_time += (float)ENGINE_STEP;
 
-		if (true == XCheckMaskEvent(_dpy,KeyPressMask ,&_xevent))
-			_kb_func(_xevent.xkey.keycode,0,0);
-		else if (true == XCheckMaskEvent(_dpy,PointerMotionMask ,&_xevent))
+		if (true == XCheckMaskEvent(_dpy,KeyPressMask | ButtonPressMask,&_xevent))
 		{
-			_mouse_func(-1,0,_xevent.xmotion.x,_xevent.xmotion.y);
-		} else if (true == XCheckMaskEvent(_dpy, ButtonPressMask ,&_xevent))
-		{
-			_mouse_func(_xevent.xbutton.button,0,_xevent.xbutton.x,_xevent.xbutton.y);
+			switch (_xevent.type)
+			{
+			case KeyPress:
+				_kb_func(_xevent.xkey.keycode,0,0);
+				break;
+
+			case ButtonPress:
+				_mouse_func(_xevent.xbutton.button,0,_xevent.xbutton.x,_xevent.xbutton.y);
+				break;
+
+			default:
+				break;
+			}
+
 		}
 
 		//Effectue tous les calculs et changements de scene du gameplay, s'il existe
