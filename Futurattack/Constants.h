@@ -9,9 +9,10 @@
 #define CONSTANTS_H_
 
 #define MAX_NAME_LENGTH			128		//String length for name in BaseObject
-#define ENGINE_STEP				20 		//Engine step in ms.
+#define ENGINE_STEP				10 		//Engine step in ms.
 #define MAX_DBG_MESSAGE_LENGTH	256		//Longueur max d'un message de debug
 #define DBG_TIME				6000	//Duree d'affichage de la console de debug
+#define EVENT_REFRESH_STEP		10		//Every ENGINE_STEP * EVENT_REFRESH_STEP ms, keyboard, mouse, ... are refreshed
 
 #define OBJ_FILE_LINE_LENGTH	80
 #define OBJ_FILE_MAX_VERTEX		128000

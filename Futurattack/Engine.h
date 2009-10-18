@@ -40,6 +40,7 @@ class Engine: public BaseObject {
 	int _resx;
 	int _resy;
 	float _ms_time;
+	int _event_refresh_passes;
 
 	IViewable * _iviewable;
 	IGameplay * _igameplay;

@@ -45,6 +45,7 @@ Engine::Engine() : BaseObject()
 	_imouse = NULL;
 	_dbg_message_time = 0.0;
 	_run = true;
+	_event_refresh_passes = 0;
 }
 
 void Engine::InitAll(int *argc, char **argv, int resx, int resy,bool fullscreen)
@@ -130,25 +131,30 @@ void Engine::Run()
 	while (_run)
 	{
 		usleep(1000*ENGINE_STEP);
-		_ms_time += (float)ENGINE_STEP;
-
-		if (true == XCheckMaskEvent(_dpy,KeyPressMask | ButtonPressMask,&_xevent))
+		if (_event_refresh_passes%EVENT_REFRESH_STEP)
 		{
-			switch (_xevent.type)
+			if (true == XCheckMaskEvent(_dpy,KeyPressMask | ButtonPressMask,&_xevent))
 			{
-			case KeyPress:
-				_kb_func(_xevent.xkey.keycode,0,0);
-				break;
+				switch (_xevent.type)
+				{
+				case KeyPress:
+					_kb_func(_xevent.xkey.keycode,0,0);
+					break;
 
-			case ButtonPress:
-				_mouse_func(_xevent.xbutton.button,0,_xevent.xbutton.x,_xevent.xbutton.y);
-				break;
+				case ButtonPress:
+					_mouse_func(_xevent.xbutton.button,0,_xevent.xbutton.x,_xevent.xbutton.y);
+					break;
 
-			default:
-				break;
+				default:
+					break;
+				}
+
 			}
+			_event_refresh_passes = 0;
+		} else
+			_event_refresh_passes++;
 
-		}
+		_ms_time += (float)ENGINE_STEP;
 
 		//Effectue tous les calculs et changements de scene du gameplay, s'il existe
 		if (_igameplay!=NULL)
