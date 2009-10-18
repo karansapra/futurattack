@@ -140,7 +140,7 @@ void OBJ3DObject::Render()
 
 
 
-bool OBJ3DObject::Load(const char *filename)
+bool OBJ3DObject::Load(const char *filename, bool useMtl)
 {
 	//RAZ du nb de meshes
 	_nmeshes = 0;
@@ -257,7 +257,7 @@ bool OBJ3DObject::Load(const char *filename)
 			break;
 
 		case 'u':
-			if (buffer_line[1]=='s' && buffer_line[2]=='e')
+			if (buffer_line[1]=='s' && buffer_line[2]=='e' && useMtl)
 			{
 				//usemtl : on veut que l'objet qui suit ait un materiau
 				char mtl_name[128];
@@ -278,7 +278,7 @@ bool OBJ3DObject::Load(const char *filename)
 			break;
 
 		case 'm':
-			if (buffer_line[1]=='t' && buffer_line[2]=='l')
+			if (buffer_line[1]=='t' && buffer_line[2]=='l' && useMtl)
 			{
 				//On est dans le cas ou un fichier de material est specifie
 				//On reconstruit le path total

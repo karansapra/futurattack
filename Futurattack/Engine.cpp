@@ -148,7 +148,6 @@ void Engine::Run()
 				default:
 					break;
 				}
-
 			}
 			_event_refresh_passes = 0;
 		} else

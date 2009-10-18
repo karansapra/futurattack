@@ -38,7 +38,7 @@ public:
 	OBJ3DObject();
 	virtual ~OBJ3DObject();
 
-	bool Load(const char * filename);
+	bool Load(const char * filename, bool useMtl=true);
 
 	//Blender pose l'origine de la texture en bas a gauche, donc pr activer le mode
 	void SwitchTextureOrigin();

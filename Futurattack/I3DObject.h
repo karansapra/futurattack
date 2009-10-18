@@ -39,7 +39,7 @@ public:
 	I3DObject();
 	virtual ~I3DObject();
 
-	virtual bool Load(const char * filename)=0;
+	virtual bool Load(const char * filename, bool useMtl = true)=0;
 };
 
 #endif /* I3DOBJECT_H_ */

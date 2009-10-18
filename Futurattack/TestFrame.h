@@ -18,6 +18,7 @@
 #include "SunRasterTexture.h"
 #include "BitmapTexture.h"
 #include "OBJ3DObject.h"
+#include "Shader.h"
 
 class TestFrame: public IViewable, public IKeyboard, public IMouse {
 	float _current_zoom;
@@ -28,6 +29,8 @@ class TestFrame: public IViewable, public IKeyboard, public IMouse {
 	GLuint _textures[2];
 
 	OBJ3DObject * _base_case;
+
+	Shader * _shader;
 
 public:
 	TestFrame();

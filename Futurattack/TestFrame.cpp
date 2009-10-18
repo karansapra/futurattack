@@ -59,7 +59,11 @@ TestFrame::TestFrame() : IViewable() {
 	//Chargement des cases du plateau
 	_base_case = new OBJ3DObject();
 	_base_case->SwitchTextureOrigin();
-	_base_case->Load("/home/clement/Bureau/Case2.obj");
+	_base_case->Load("/home/clement/Bureau/Case2.obj",false);
+
+
+	_shader = new Shader();
+	_shader->CreateShader("/home/clement/Bureau/shaders/shader.vert","/home/clement/Bureau/shaders/shader.frag");
 }
 
 TestFrame::~TestFrame() {
@@ -82,8 +86,10 @@ void TestFrame::Render()
 	glPushMatrix();
 		glRotatef(Engine::GetInstance().GetCurrentTime()*360.0/16800.0,0.0,1.0,0.0);
 
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D,_textures[0]);
+		glColor4f(1.0,0.0,1.0,0.5);
+
+		glDisable(GL_TEXTURE_2D);
+		//glBindTexture(GL_TEXTURE_2D,_textures[0]);
 
 		glFrontFace(GL_CCW);
 		glTranslatef(0.0,0.0,-5.0*2.5/2.0);
@@ -133,6 +139,12 @@ void TestFrame::KeyPressed(char key)
 	} else if (key==KEYCODE_Q)
 	{
 		exit(0);
+	} else if (key==KEYCODE_M)
+	{
+		_shader->EnableShader();
+	} else if (key==KEYCODE_P)
+	{
+		_shader->DisableShader();
 	}
 	_camera->SetEyePosition(0.0,_ycam,3.0);
 	_camera->Move(_x,_y,0.0);
