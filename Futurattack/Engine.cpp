@@ -105,6 +105,17 @@ void Engine::InitAll(int *argc, char **argv, int resx, int resy,bool fullscreen)
 		XSendEvent(_dpy, _root, False,SubstructureNotifyMask, &xev);
 	}
 
+	int n_elems=0;
+	XRRScreenSize * sizes;
+	sizes = XRRSizes(_dpy,0,&n_elems);
+	for (int i=0;i<n_elems;i++)
+	{
+		printf("%dx%d\n",sizes[i].width,sizes[i].height);
+	}
+	XRRScreenConfiguration * current_config;
+	current_config = XRRGetScreenInfo(_dpy,_root);
+
+
 	XStoreName(_dpy,_window,"Futurattack - RJ Game Studio - 2009");
 	_glx_context = glXCreateContext(_dpy,visual_info,NULL,GL_TRUE);
 	glXMakeCurrent(_dpy,_window,_glx_context);

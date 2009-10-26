@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <X11/Xlib.h>
+#include <X11/extensions/Xrandr.h>
 #include <GL/glx.h>
 #include "BaseObject.h"
 #include "IViewable.h"
