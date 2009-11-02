@@ -11,9 +11,15 @@
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+//OpenGL
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glext.h>
+
+//OpenAL
+#include <al.h>
+
 
 #include <vector>
 

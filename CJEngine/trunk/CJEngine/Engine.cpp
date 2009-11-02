@@ -40,12 +40,50 @@ namespace CJEngine {
 	}
 
     bool Engine::Init(int width, int height, const char *title, bool fullscreen)
-    {
+    {		
     	_width = width;
     	_height = height;
     	_title = (char*)((title));
         _fullscreen = fullscreen;
         _hinstance = GetModuleHandleA(0);
+
+		_audio_device = alcOpenDevice(NULL);
+		if (_audio_device==NULL)
+			_audio_enabled = false;
+		else
+		{
+			_audio_context = alcCreateContext(_audio_device,NULL);
+			alcMakeContextCurrent(_audio_context);
+			_audio_enabled = true;			
+			_eax_enabled = (bool)alIsExtensionPresent("EAX2.0");			
+			int format,size,freq;
+			ALboolean loop;
+
+			ALuint buffers[1];
+			ALuint sources[1];
+			alGenBuffers(1,buffers);
+			alGenSources(1,sources);
+
+			OggVorbis_File fichier_ogg;
+			vorbis_info * infos;
+
+			if (ov_fopen("C:\\ogg.ogg",&fichier_ogg)==0)
+			{				
+				char data[44100*4*2];
+				int bitstream;
+				int total=0;
+				while (total<44100*4*2)
+					total += ov_read(&fichier_ogg,data+total,44100*4*2-total,0,2,1,&bitstream);
+
+				infos = ov_info(&fichier_ogg,-1);
+				printf("Infos\nChannels:%d\nRate:%d\n",infos->channels,infos->rate);
+				printf("Decode size:%d\n",total);
+				alBufferData(buffers[0],AL_FORMAT_STEREO16,data,44100*4*2,infos->rate);				
+				alSourcei(sources[0],AL_BUFFER,buffers[0]);
+				alSourcePlay(sources[0]);
+			}
+		}
+
 
         LARGE_INTEGER cpu_freq;
         if(QueryPerformanceFrequency(&cpu_freq) == 0)
@@ -55,8 +93,8 @@ namespace CJEngine {
         //Creation of the class to create the window
         WNDCLASS wc;
         ZeroMemory(&wc,sizeof(WNDCLASS));
-        wc.hCursor = LoadCursorA(NULL,IDC_ARROW);
-        wc.hIcon = LoadIconA(NULL,"disp.ico");
+		wc.hCursor = LoadCursorA(NULL,IDC_ARROW);
+        wc.hIcon = LoadIconA(_hinstance,MAKEINTRESOURCE(IDI_ICON1));
         wc.hInstance = _hinstance;
         wc.lpfnWndProc = _wnd_proc_wrapper;
         wc.lpszClassName = "mainframe";

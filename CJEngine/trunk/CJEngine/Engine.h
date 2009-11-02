@@ -9,11 +9,23 @@
 #define ENGINE_H_
 
 #include <windows.h>
+
+//OpenGL
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glext.h>
+
+//OpenAL
+#include <al.h>
+#include <alc.h>
+#include <alut.h>
+
+//OggVorbis
+#include "vorbis/vorbisfile.h"
+
 #include <vector>
 
+#include "resource.h"
 #include "IEventReceiver.h"
 #include "UIFrame.h"
 #include "IGameLogic.h"
@@ -56,6 +68,12 @@ class Engine {
 	HWND _mainframe;
 	HDC _hdc;
 	HGLRC _hglrc;
+
+	//OpenAL
+	ALCdevice * _audio_device;
+	ALCcontext * _audio_context;
+	bool _audio_enabled;
+	bool _eax_enabled;
 
 	//To keep trace of IEventReceiver's
 	vector<IEventReceiver*> _ieventreceivers;
