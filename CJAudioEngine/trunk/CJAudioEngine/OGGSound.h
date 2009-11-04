@@ -2,7 +2,6 @@
 
 #include "ISound.h"
 
-
 class OGGSound :
 	public ISound
 {
