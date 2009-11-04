@@ -4,8 +4,6 @@
 #include "ISound.h"
 #include "OGGSound.h"
 
-DWORD WINAPI _audio_refresh_thread(void * data);
-
 class CJAudioEngine
 {
 	friend class ISound;
@@ -29,6 +27,9 @@ class CJAudioEngine
 
 	ISound * _isoundlist[MAX_SOUNDS];
 
+	static DWORD WINAPI _audio_refresh_thread(void * data);
+	void _Refresh();
+
 public:	
 	//Returns the unique instance of the singleton
 	static CJAudioEngine * GetInstance();
@@ -36,5 +37,5 @@ public:
 	void SetListenerPosition(float x, float y, float z);
 	ISound * CreateSound(const char * filename);
 
-	void _Refresh();	
+	
 };

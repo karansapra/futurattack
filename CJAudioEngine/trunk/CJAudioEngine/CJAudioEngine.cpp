@@ -39,16 +39,12 @@ ISound * CJAudioEngine::CreateSound(const char * filename)
 
 	EnterCriticalSection(&_sound_list_access);
 	if (_audio_engine_started)
-	{
-		
+	{		
 		newsound = new OGGSound();
 		if (!newsound->Load(filename))
 		{
 			delete newsound;
 			newsound = 0;
-		} else
-		{
-			
 		}
 	}
 	LeaveCriticalSection(&_sound_list_access);
@@ -85,12 +81,11 @@ void CJAudioEngine::SetListenerPosition(float x, float y, float z)
 	LeaveCriticalSection(&_sound_list_access);	
 }
 
-DWORD WINAPI _audio_refresh_thread(void * data)
+DWORD WINAPI CJAudioEngine::_audio_refresh_thread(void * data)
 {
-	CJAudioEngine * current_instance = CJAudioEngine::GetInstance();
 	while (1)
 	{
 		Sleep(200);		
-		current_instance->_Refresh();
+		_instance->_Refresh();
 	}
 }
