@@ -3,7 +3,9 @@
 int main()
 {
 	CJAudioEngine * audio_engine = CJAudioEngine::GetInstance();
-	ISound * music = audio_engine->CreateSound("C:\\ogg.ogg");
+	IMusic * music = audio_engine->CreateMusic("C:\\ogg.ogg");
+	
+	music->Play();
 
 	char c;
 	while ((c=getchar())!='q')

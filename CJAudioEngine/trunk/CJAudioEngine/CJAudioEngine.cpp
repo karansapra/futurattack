@@ -48,6 +48,23 @@ ISound * CJAudioEngine::CreateSound(const char * filename)
 	return newsound;
 }
 
+IMusic * CJAudioEngine::CreateMusic(const char * filename)
+{
+	IMusic * newmusic;
+
+	if (_audio_engine_started)
+	{		
+		newmusic = new OGGMusic();
+		
+		if (!newmusic->Load(filename))
+		{
+			delete newmusic;
+			newmusic = 0;
+		}
+	}
+	return newmusic;
+}
+
 CJAudioEngine * CJAudioEngine::GetInstance()
 {
 	if (_instance==0)
