@@ -1,23 +1,21 @@
 #pragma once
 
 #include "CJAudioEngineSystem.h"
+#include "IOpenAL.h"
 #include "ISound.h"
 #include "OGGSound.h"
 
-class CJAudioEngine
+class CJAudioEngine : public IOpenAL
 {
-	friend class ISound;
-
 	//Ctors and Dtors
 	CJAudioEngine(void);
 	~CJAudioEngine(void);
-	
+
 	//OpenAL initialization
 	void _Init();
 
 	//Singleton instance of AudioEngine
 	static CJAudioEngine * _instance;
-	CRITICAL_SECTION _sound_list_access;
 
 	bool _audio_engine_started;
 	ALCdevice * _audio_device;
@@ -27,15 +25,12 @@ class CJAudioEngine
 
 	ISound * _isoundlist[MAX_SOUNDS];
 
-	static DWORD WINAPI _audio_refresh_thread(void * data);
-	void _Refresh();
-
 public:	
 	//Returns the unique instance of the singleton
 	static CJAudioEngine * GetInstance();
 
 	void SetListenerPosition(float x, float y, float z);
 	ISound * CreateSound(const char * filename);
-
 	
 };
+

@@ -21,7 +21,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -179,6 +179,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IOpenAL.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ISound.cpp"
 				>
 			</File>
@@ -202,6 +206,10 @@
 			</File>
 			<File
 				RelativePath=".\CJAudioEngineSystem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IOpenAL.h"
 				>
 			</File>
 			<File
