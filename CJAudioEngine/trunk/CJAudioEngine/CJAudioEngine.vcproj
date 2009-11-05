@@ -94,7 +94,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -118,7 +118,7 @@
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="./"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -179,6 +179,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IMusic.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\IOpenAL.cpp"
 				>
 			</File>
@@ -188,6 +192,10 @@
 			</File>
 			<File
 				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\OGGMusic.cpp"
 				>
 			</File>
 			<File
@@ -209,11 +217,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IMusic.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IOpenAL.h"
 				>
 			</File>
 			<File
 				RelativePath=".\ISound.h"
+				>
+			</File>
+			<File
+				RelativePath=".\OGGMusic.h"
 				>
 			</File>
 			<File

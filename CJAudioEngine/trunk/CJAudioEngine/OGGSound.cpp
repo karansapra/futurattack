@@ -31,6 +31,9 @@ bool OGGSound::Load(const char * filename)
 	_channels = _ogg_file.vi->channels;
 	_total_time = ov_time_total(&_ogg_file,-1);
 
+	if (_channels!=2 && _channels!=1)
+		return false;
+
 	//Si le fichier audio est trop long, on le refuse
 	if (_total_time>5*60)
 		return false;
@@ -86,7 +89,10 @@ void OGGSound::_thread_loading()
 	EnterCriticalSection(_openal_access);
 		alGenBuffers(1,_buffer);
 		alGenSources(1,_source);
-		alBufferData(_buffer[0],AL_FORMAT_STEREO16,_sound_data,_sound_data_size,_frequency);
+		if (_channels==2)
+			alBufferData(_buffer[0],AL_FORMAT_STEREO16,_sound_data,_sound_data_size,_frequency);
+		else
+			alBufferData(_buffer[0],AL_FORMAT_MONO16,_sound_data,_sound_data_size,_frequency);
 		alSourcei(_source[0],AL_BUFFER,_buffer[0]);
 	LeaveCriticalSection(_openal_access);
 

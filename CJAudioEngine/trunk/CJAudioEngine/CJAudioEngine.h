@@ -2,8 +2,12 @@
 
 #include "CJAudioEngineSystem.h"
 #include "IOpenAL.h"
+
 #include "ISound.h"
 #include "OGGSound.h"
+
+#include "IMusic.h"
+#include "OGGMusic.h"
 
 class CJAudioEngine : public IOpenAL
 {
@@ -31,6 +35,6 @@ public:
 
 	void SetListenerPosition(float x, float y, float z);
 	ISound * CreateSound(const char * filename);
-	
+	IMusic * CreateMusic(const char * filename);
 };
 
