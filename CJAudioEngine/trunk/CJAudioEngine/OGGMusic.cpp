@@ -41,7 +41,7 @@ bool OGGMusic::Load(const char * filename)
 
 void OGGMusic::Play()
 {	
-	if (_buffer[0]==0)
+	if (_buffer[0]==0 || _current_playing_state==PLAY)
 		return;
 
 	EnterCriticalSection(_openal_access);
@@ -67,14 +67,20 @@ void OGGMusic::Play()
 
 void OGGMusic::Pause()
 {
-	_current_playing_state = PAUSE;
-	SetEvent(_state_changed);
+	if (_current_playing_state!=STANDBY)
+	{
+		_current_playing_state = PAUSE;
+		SetEvent(_state_changed);
+	}
 }
 
 void OGGMusic::Stop()
 {
-	_current_playing_state = STOP;
-	SetEvent(_state_changed);
+	if (_current_playing_state!=STANDBY)
+	{
+		_current_playing_state = STOP;
+		SetEvent(_state_changed);
+	}
 }
 
 DWORD WINAPI OGGMusic::_thread_play_pause_stop_wrapper(void * data)
@@ -85,6 +91,8 @@ DWORD WINAPI OGGMusic::_thread_play_pause_stop_wrapper(void * data)
 
 void OGGMusic::_thread_play_pause_stop()
 {
+	int buffers=0;
+
 	total_reads=0;
 	actual_reads=0;	
 	buffer_unqueue = 0;
@@ -94,29 +102,29 @@ void OGGMusic::_thread_play_pause_stop()
 
 	while (1)
 	{
-		WaitForSingleObject(_state_changed,100);
-		ResetEvent(_state_changed);	
+		WaitForSingleObject(_state_changed,500);
+		ResetEvent(_state_changed);
 
 		switch (_current_playing_state)
 		{
 		case PLAY:
 			nprocessed = 0;
-
 			EnterCriticalSection(_openal_access);
 			alGetSourcei(_source[0],AL_BUFFERS_PROCESSED,&nprocessed);
-			//printf("processed:%d",nprocessed);
 			for (int i=0;i<nprocessed;i++)
 			{	
 				buffer_unqueue = 0;
 				alSourceUnqueueBuffers(_source[0],1,&buffer_unqueue);
 				while (actual_reads!=_stream_block_size && actual_reads+total_reads<_sound_data_size)
+				{					
 					actual_reads += ov_read(&_ogg_file,_sound_data[0]+actual_reads,_stream_block_size-actual_reads,0,2,1,&bitstream);
-
+				}
 				total_reads += actual_reads;
-
-				alBufferData(buffer_unqueue,AL_FORMAT_STEREO16,_sound_data[0],_stream_block_size,_frequency);
-				alSourceQueueBuffers(_source[0],1,&buffer_unqueue);
-
+				if (actual_reads!=0)
+				{
+					alBufferData(buffer_unqueue,AL_FORMAT_STEREO16,_sound_data[0],actual_reads,_frequency);
+					alSourceQueueBuffers(_source[0],1,&buffer_unqueue);
+				}
 				actual_reads = 0;
 
 				ALint sstate;
@@ -130,23 +138,40 @@ void OGGMusic::_thread_play_pause_stop()
 						alSourcePlay(_source[0]);
 					} else
 					{
-						alSourceStop(_source[0]);
 						_current_playing_state = STOP;
 						SetEvent(_state_changed);
 					}
 				}
 			}
-			
+
 			LeaveCriticalSection(_openal_access);
 			break;
 
 		case PAUSE:
+			printf("PAUSING\n");
 			EnterCriticalSection(_openal_access);
-			alSourcePause(_source[0]);
+			alSourceStop(_source[0]);
+			alGetSourcei(_source[0],AL_BUFFERS_QUEUED,&buffers);
+			for (int i=0;i<buffers;i++)
+				alSourceUnqueueBuffers(_source[0],1,&buffer_unqueue);
 			LeaveCriticalSection(_openal_access);
+			_current_playing_state = STANDBY;
 			break;
 
 		case STOP:
+			printf("STOPING\n");
+			total_reads = 0;
+			EnterCriticalSection(_openal_access);
+			alSourceStop(_source[0]);
+			alGetSourcei(_source[0],AL_BUFFERS_QUEUED,&buffers);
+			for (int i=0;i<buffers;i++)
+				alSourceUnqueueBuffers(_source[0],1,&buffer_unqueue);
+			ov_raw_seek(&_ogg_file,0);
+			LeaveCriticalSection(_openal_access);
+			_current_playing_state = STANDBY;
+			break;
+
+		case STANDBY:
 			break;
 
 		default:

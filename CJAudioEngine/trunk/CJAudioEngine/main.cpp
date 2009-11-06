@@ -3,7 +3,7 @@
 int main()
 {
 	CJAudioEngine * audio_engine = CJAudioEngine::GetInstance();
-	IMusic * music = audio_engine->CreateMusic("C:\\ogg.ogg");
+	IMusic * music = audio_engine->CreateMusic("C:\\sample.ogg");
 	
 	music->Play();
 

@@ -6,7 +6,7 @@
 class OGGMusic :
 	public IMusic, public IOpenAL
 {
-	enum PlayingState {PLAY,PAUSE,STOP};
+	enum PlayingState {PLAY,PAUSE,STOP,STANDBY};
 	PlayingState _current_playing_state;
 
 	OggVorbis_File _ogg_file;
