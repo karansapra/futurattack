@@ -2,7 +2,7 @@
 
 #include "CJAudioEngineSystem.h"
 
-class ISound
+class DLL_LOAD ISound
 {
 protected:
 	char * _sound_data;

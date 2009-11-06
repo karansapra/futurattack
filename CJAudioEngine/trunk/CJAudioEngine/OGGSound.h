@@ -3,7 +3,7 @@
 #include "IOpenAL.h"
 #include "ISound.h"
 
-class OGGSound :
+class DLL_LOAD OGGSound :
 	public ISound, public IOpenAL
 {
 	enum PlayingState {PLAY,PAUSE,STOP};
