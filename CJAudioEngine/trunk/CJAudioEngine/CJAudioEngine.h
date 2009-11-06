@@ -9,7 +9,7 @@
 #include "IMusic.h"
 #include "OGGMusic.h"
 
-class CJAudioEngine : public IOpenAL
+class DLL_LOAD CJAudioEngine : public IOpenAL
 {
 	//Ctors and Dtors
 	CJAudioEngine(void);

@@ -2,7 +2,7 @@
 
 #include "CJAudioEngineSystem.h"
 
-class IOpenAL
+class DLL_LOAD IOpenAL
 {
 protected:
 	static CRITICAL_SECTION * _openal_access;

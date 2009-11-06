@@ -1,5 +1,12 @@
 #pragma once
 
+#ifdef DLL_MAKE
+	#define DLL_LOAD __declspec(dllexport)
+#else
+	#define DLL_LOAD __declspec(dllimport)
+#endif
+
+
 #define REFRESH_RATE		200
 #define MAX_SOUNDS			128
 

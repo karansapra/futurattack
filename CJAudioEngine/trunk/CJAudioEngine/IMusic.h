@@ -2,7 +2,7 @@
 
 #include "CJAudioEngineSystem.h"
 
-class IMusic
+class DLL_LOAD IMusic
 {
 protected:
 	//Double buffer
