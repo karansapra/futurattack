@@ -104,6 +104,8 @@ bool GolfBall::CollisionProcess(SolidBody &other_body)
 
 	if (other_body.Type==WHOLE)
 	{
+		if (Velocity.Length()>155.0f)
+			return false;
 		Whole* w = (Whole*)&other_body;
 
 		hgeVector D = w->Center-Center;

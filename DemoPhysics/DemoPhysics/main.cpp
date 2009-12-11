@@ -60,7 +60,6 @@ STATE etat_jeu=DEBUT;
 float alpha = 0.0f;
 float power = 3000.0f;
 
-
 void CollisionCallback(int id1, int id2)
 {
 	if (id1==100 && id2==101)
@@ -78,12 +77,13 @@ bool RenderFunc()
 	
 	g->Render();
 	
+	wall2->Render();
 	wall3->Render();
 	whole->Render();
 	ball->Render();
 
 	if (etat_jeu==PREPARATION)
-		fleche->RenderEx(ball->Center_1.x,ball->Center_1.y,alpha,power/25000.0f,1.0f);
+		fleche->RenderEx(ball->Center_1.x,ball->Center_1.y,alpha,power/12000.0f,1.0f);
 
 	hge->Gfx_EndScene();
 	return false;
@@ -99,16 +99,32 @@ void InGame()
 
 void Prepa()
 {
-	if (hge->Input_GetKeyState(HGEK_SPACE))
+	float x,y;
+	hge->Input_GetMousePos(&x,&y);
+	hgeVector Mouse;
+
+	Mouse.x = x;
+	Mouse.y = y;
+
+	Mouse = ball->Center-Mouse;
+
+	hgeVector Ox;
+	Ox.x = 1;
+	float dot = Ox.Dot(&Mouse);
+	dot = dot/Mouse.Length();
+	if (Mouse.Angle()>0)
+		alpha = acos(dot);
+	else
+		alpha = -acos(dot);
+	
+	power = Mouse.Length()*200.0f;
+	if (power>25000)
+		power=25000;
+	if (power<1000)
+		power=1000;
+
+	if (hge->Input_GetKeyState(HGEK_LBUTTON))
 		etat_jeu=LANCER;
-	if (hge->Input_GetKeyState(HGEK_UP))
-		alpha-=0.02f;
-	if (hge->Input_GetKeyState(HGEK_DOWN))
-		alpha+=0.02f;
-	if (hge->Input_GetKeyState(HGEK_LEFT) && power>2000.0f)
-		power-=100.0f;
-	if (hge->Input_GetKeyState(HGEK_RIGHT) && power<25000.0f)
-		power+=100.0f;
 }
 
 bool FrameFunc()
@@ -160,7 +176,6 @@ bool FrameFunc()
 void main()
 {
 	hge = hgeCreate(HGE_VERSION);
-	hge->System_SetState(HGE_LOGFILE,"log.txt");
 	hge->System_SetState(HGE_FRAMEFUNC,FrameFunc);
 	hge->System_SetState(HGE_RENDERFUNC,RenderFunc);
 	hge->System_SetState(HGE_SHOWSPLASH,true);
@@ -168,6 +183,7 @@ void main()
 	hge->System_SetState(HGE_USESOUND,false);
 	hge->System_SetState(HGE_SCREENBPP, 32);
 	hge->System_SetState(HGE_FPS,100);
+	hge->System_SetState(HGE_HIDEMOUSE,false);
 
 	hge->System_Initiate();
 
@@ -182,6 +198,7 @@ void main()
 
 	g = new Green(A,B);	
 	ball = new GolfBall(200,300,10);
+	wall2 = new Wall(300,250,370,100);
 	wall3 = new Wall(300,250,370,300);
 	whole = new Whole(650,300,12.0f);
 
@@ -203,12 +220,13 @@ void main()
 	}
 	physics->AddBody(*ball);
 	physics->AddBody(*wall3);
+	physics->AddBody(*wall2);
 	physics->AddBody(*whole);
 
 	HTEXTURE fleche_tex = hge->Texture_Load("fleche.png");
-	fleche = new hgeSprite(fleche_tex,0,0,200,24);
+	fleche = new hgeSprite(fleche_tex,0,0,128,3);
 	fleche->SetBlendMode(BLEND_ALPHABLEND);
-	fleche->SetHotSpot(0,12);
+	fleche->SetHotSpot(0,1.5);
 	fleche->SetColor(0xFFFFFFFF);
 	fleche->SetZ(0.2f);
 
