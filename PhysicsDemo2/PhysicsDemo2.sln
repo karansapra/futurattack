@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysicsDemo2", "PhysicsDemo2\PhysicsDemo2.vcproj", "{687A5B55-3EB7-4105-831E-56E3FBC6876E}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release (x86)|Win32 = Release (x86)|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{687A5B55-3EB7-4105-831E-56E3FBC6876E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{687A5B55-3EB7-4105-831E-56E3FBC6876E}.Debug|Win32.Build.0 = Debug|Win32
+		{687A5B55-3EB7-4105-831E-56E3FBC6876E}.Release (x86)|Win32.ActiveCfg = Release (x86)|Win32
+		{687A5B55-3EB7-4105-831E-56E3FBC6876E}.Release (x86)|Win32.Build.0 = Release (x86)|Win32
+		{687A5B55-3EB7-4105-831E-56E3FBC6876E}.Release|Win32.ActiveCfg = Release|Win32
+		{687A5B55-3EB7-4105-831E-56E3FBC6876E}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
