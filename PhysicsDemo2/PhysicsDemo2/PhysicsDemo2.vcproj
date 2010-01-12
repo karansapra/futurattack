@@ -261,7 +261,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\huffman.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ObjFileLoader.cpp"
 				>
 			</File>
 			<File
@@ -278,6 +286,10 @@
 			</File>
 			<File
 				RelativePath=".\rigidbody.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\stack.cpp"
 				>
 			</File>
 			<File
@@ -303,6 +315,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\huffman.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ObjFileLoader.h"
+				>
+			</File>
+			<File
 				RelativePath=".\particle.h"
 				>
 			</File>
@@ -320,6 +340,10 @@
 			</File>
 			<File
 				RelativePath=".\rigidbody.h"
+				>
+			</File>
+			<File
+				RelativePath=".\stack.h"
 				>
 			</File>
 			<File
