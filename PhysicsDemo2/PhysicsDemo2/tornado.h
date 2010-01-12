@@ -36,7 +36,6 @@ XBox 360 Controller constants
 #define XB360_POV_NW		31500
 #define XB360_POV_NONE		65535
 
-
 struct JOYSTICK_INFOS
 {
 	XY analogA;
@@ -54,6 +53,7 @@ struct JOYSTICK_INFOS
 		Plugged = false;
 	}
 };
+
 
 
 class TornadoEngine
@@ -126,10 +126,12 @@ public:
 	void DrawCone(REAL base_size,REAL height);
 	void DrawLine(Vector3 & direction, Vector3 & origin=Vector3());
 	void DrawCube(REAL size, Vector3 & center=Vector3());
+	void DrawVertexArray(VertexArray & varray);
+	void DrawMesh(Mesh & mesh);
+
+	void SetWireframeState(bool enabled);
 
 	JOYSTICK_INFOS GetJoystickState();
 };
-
-
 
 #endif

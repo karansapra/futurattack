@@ -6,8 +6,17 @@
 
 struct Vector3
 {
-	REAL x,y,z;
-	
+	union
+	{
+		struct
+		{
+			REAL x;
+			REAL y;
+			REAL z;
+		};
+		REAL values[3];
+	};
+
 	/*
 	Recopy constructor. It only copy the values of
 	x, y and z in the new vector
@@ -267,5 +276,24 @@ Vector3 LocalToWorldTransform(const Vector3 &local, const HomogenousMatrix44 &tr
 Permits to transform a world point to a local body point
 */
 Vector3 WorldToLocalTransform(const Vector3 &world, const HomogenousMatrix44 &transform);
+
+
+typedef std::vector<Vector3> VertexArray;
+
+
+
+
+
+struct Mesh
+{
+	struct Face
+	{
+		U32 indexes[3];
+	};	
+	typedef std::vector<Face> FaceArray;
+
+	VertexArray vertices;
+	FaceArray faces;
+};
 
 #endif

@@ -2,12 +2,15 @@
 #define TYPES_H
 
 #include <math.h>
+#include <vector>
 
 //Types
 typedef float			REAL;
 typedef unsigned char	U8;
 typedef unsigned short	U16;
 typedef unsigned int	U32;
+
+typedef U8*				PTR;
 
 //Function pointers
 typedef void (*PFUNC)(void);

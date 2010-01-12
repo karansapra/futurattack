@@ -183,6 +183,55 @@ void TornadoEngine::DrawLine(Vector3 & direction, Vector3 & origin)
 	glPopMatrix();	
 }
 
+void TornadoEngine::DrawVertexArray(VertexArray & varray)
+{
+	static VertexArray::iterator i;
+
+	glPushMatrix();
+	glPointSize(3.0);
+	glBegin(GL_POINTS);
+	glColor3f(0.0,0.0,1.0);
+	for (i=varray.begin();i!=varray.end();i++)
+		glVertex3f(i->x,i->y,i->z);
+	glEnd();	
+	glPopMatrix();
+	glPointSize(1.0);
+}
+
+void TornadoEngine::SetWireframeState(bool enabled)
+{
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
+
+	if (enabled)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glDisable(GL_CULL_FACE);
+	}
+	else
+	{
+		glPolygonMode(GL_FRONT, GL_FILL);
+		glEnable(GL_CULL_FACE);
+	}
+}
+
+void TornadoEngine::DrawMesh(Mesh & mesh)
+{
+	static Mesh::FaceArray::iterator i;
+
+	glPushMatrix();
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.0,0.0,1.0);
+	for (i=mesh.faces.begin();i!=mesh.faces.end();i++)
+	{
+		glVertex3fv(mesh.vertices.at(i->indexes[0]).values);
+		glVertex3fv(mesh.vertices.at(i->indexes[1]).values);
+		glVertex3fv(mesh.vertices.at(i->indexes[2]).values);
+	}
+	glEnd();	
+	glPopMatrix();
+}
+
 REAL TornadoEngine::GetTime()
 {
 	static LARGE_INTEGER counter;
@@ -200,7 +249,7 @@ JOYSTICK_INFOS TornadoEngine::GetJoystickState()
 	joyinfoex.dwSize = sizeof(JOYINFOEX);
 	joyinfoex.dwFlags = JOY_RETURNALL;
 
-	if (joyGetPosEx(0,&joyinfoex)==JOYERR_UNPLUGGED)
+	if (joyGetPosEx(0,&joyinfoex)!=JOYERR_NOERROR)
 		return JOYSTICK_INFOS();
 
 	joy_infos.Plugged = true;

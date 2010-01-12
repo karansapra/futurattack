@@ -9,6 +9,9 @@
 #include "particle.h"
 #include "particleforcegenerator.h"
 #include "rigidbody.h"
+#include "objfileloader.h"
+#include "stack.h"
+#include "huffman.h"
 
 #include <windows.h>
 #include <GL/gl.h>
@@ -27,11 +30,15 @@ class MyScene : public IRenderable
 	World physic_world;
 	RigidBody body1;
 	RigidBody body2;
-	
+
+	Mesh mesh;
+
 public:
 	MyScene()
 	{
 		tornado = TornadoEngine::GetInstance();
+
+		LoadObjFile((U8*)"objet.obj",mesh);
 
 		body1.position = Vector3(3,2,0);
 		body1.SetSphereInertiaTensor(2,2);
@@ -142,14 +149,48 @@ public:
 		tornado->DrawSphere(1);
 		glPopMatrix();
 
+		tornado->SetWireframeState(true);
+		glPushMatrix();
+		tornado->DrawMesh(mesh);
+		glPopMatrix();
+		tornado->SetWireframeState(false);
+
 	}
 };
 
+void CalcOBB(VertexArray & varray)
+{
+	VertexArray::iterator i;
+
+	Vector3 center;
+	Vector3 axes[3];
+	Vector3 widths;
+
+	for (i=varray.begin();i<varray.end();i++)
+	{
+		
+	}
+}
+
+StackAllocator st;
+
 void main(int argc, char **argv)
 {
+	st.Allocate(10);
+	st.Allocate(1);
+	st.FreeLast();
+	st.FreeLast();
+
+	char * str = "hello world";
+	compute_stats((U8*)str,strlen(str));
+
+	system("PAUSE");
+
+	/*
 	MyScene myscene;
 	TornadoEngine * tornado = TornadoEngine::GetInstance();	
 	tornado->Init(myscene);
 	tornado->Run();
+	*/
 }
 
