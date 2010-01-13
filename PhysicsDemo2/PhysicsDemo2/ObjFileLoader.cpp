@@ -62,6 +62,13 @@ void LoadObjFileStateMachine(U8 * line, Mesh & mesh)
 			sscanf((const char *)line,"v %f %f %f",&v.x,&v.y,&v.z);
 			mesh.vertices.push_back(v);
 			break;
+		case 'n':
+			/*
+			Normal
+			*/			
+			sscanf((const char *)line,"v %f %f %f",&v.x,&v.y,&v.z);
+			mesh.normals.push_back(v);
+			break;
 		case 't':
 			v.z = 0;
 			sscanf((const char *)line,"vt %f %f",&v.x,&v.y);
@@ -83,6 +90,9 @@ void LoadObjFileStateMachine(U8 * line, Mesh & mesh)
 		f.indexes[0] = *indices - 1;
 		f.indexes[1] = *(indices+2) - 1;
 		f.indexes[2] = *(indices+4) - 1;
+		f.nindexes[0] = *(indices+1) - 1;
+		f.nindexes[1] = *(indices+3) - 1;
+		f.nindexes[2] = *(indices+5) - 1;
 		mesh.faces.push_back(f);
 		break;
 	default:

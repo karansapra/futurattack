@@ -91,7 +91,7 @@ void RigidBody::AddForceAtPoint(const Vector3 & world_point, const Vector3 & for
 {
 	Vector3 pt = world_point - position;
 	AddForce(force);
-	AddTorque(pt%force);
+	AddTorque((pt%force));
 }
 
 void RigidBody::AddTorque(const Vector3 & torque)

@@ -83,6 +83,7 @@ void TornadoEngine::glinit()
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_BLEND);
 
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 	gluPerspective(40.0f,16.0f/10.0f,0.1f,1000.0f);
@@ -227,13 +228,21 @@ void TornadoEngine::DrawMesh(Mesh & mesh)
 	glPushMatrix();
 	glBegin(GL_TRIANGLES);
 	glColor3f(1.0,0.0,1.0);
+
 	for (i=mesh.faces.begin();i!=mesh.faces.end();i++)
 	{
+		glNormal3fv(mesh.normals.at(i->nindexes[0]).values);
 		glVertex3fv(mesh.vertices.at(i->indexes[0]).values);
+		glNormal3fv(mesh.normals.at(i->nindexes[1]).values);
 		glVertex3fv(mesh.vertices.at(i->indexes[1]).values);
+		glNormal3fv(mesh.normals.at(i->nindexes[2]).values);
 		glVertex3fv(mesh.vertices.at(i->indexes[2]).values);
 	}
+	glEnd();
 
+	glColor3f(1.0,1.0,1.0);
+	
+	glPushMatrix();
 	glTranslatef(
 		mesh.boundingsphere.center.x,
 		mesh.boundingsphere.center.y,
@@ -241,8 +250,8 @@ void TornadoEngine::DrawMesh(Mesh & mesh)
 		);
 	glColor3f(0.0,0.0,1.0);
 	glutWireSphere(mesh.boundingsphere.radius,16,16);
+	glPopMatrix();
 
-	glEnd();	
 	glPopMatrix();
 }
 
