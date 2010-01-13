@@ -11,7 +11,6 @@
 #include "rigidbody.h"
 #include "objfileloader.h"
 #include "stack.h"
-#include "huffman.h"
 
 #include <windows.h>
 #include <GL/gl.h>
@@ -38,7 +37,7 @@ public:
 	{
 		tornado = TornadoEngine::GetInstance();
 
-		LoadObjFile((U8*)"objet.obj",mesh);
+		LoadObjFile((U8*)"mini_obj.obj",mesh);
 
 		body1.position = Vector3(3,2,0);
 		body1.SetSphereInertiaTensor(2,2);
@@ -176,21 +175,9 @@ StackAllocator st;
 
 void main(int argc, char **argv)
 {
-	st.Allocate(10);
-	st.Allocate(1);
-	st.FreeLast();
-	st.FreeLast();
-
-	char * str = "hello world";
-	compute_stats((U8*)str,strlen(str));
-
-	system("PAUSE");
-
-	/*
 	MyScene myscene;
 	TornadoEngine * tornado = TornadoEngine::GetInstance();	
 	tornado->Init(myscene);
 	tornado->Run();
-	*/
 }
 

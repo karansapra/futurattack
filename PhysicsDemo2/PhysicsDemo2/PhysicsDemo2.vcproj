@@ -261,10 +261,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\huffman.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
@@ -315,10 +311,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\huffman.h"
-				>
-			</File>
-			<File
 				RelativePath=".\ObjFileLoader.h"
 				>
 			</File>
@@ -360,14 +352,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath="..\..\..\..\..\Desktop\VS2008ImageLibrary\Objects\ico_format\WinVista\gamecontroller.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\PhysicsDemo2.rc"
-				>
-			</File>
 		</Filter>
 	</Files>
 	<Globals>

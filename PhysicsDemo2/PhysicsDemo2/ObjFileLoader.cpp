@@ -62,6 +62,11 @@ void LoadObjFileStateMachine(U8 * line, Mesh & mesh)
 			sscanf((const char *)line,"v %f %f %f",&v.x,&v.y,&v.z);
 			mesh.vertices.push_back(v);
 			break;
+		case 't':
+			v.z = 0;
+			sscanf((const char *)line,"vt %f %f",&v.x,&v.y);
+			mesh.texcoords.push_back(v);
+			break;
 
 		default:
 			break;
@@ -71,7 +76,10 @@ void LoadObjFileStateMachine(U8 * line, Mesh & mesh)
 		/*
 		Tri face
 		*/
-		sscanf((const char *)line,"f %u//%u %u//%u %u//%u",indices,indices+1,indices+2,indices+3,indices+4,indices+5);
+		if (mesh.texcoords.size()==0)
+			sscanf((const char *)line,"f %u//%u %u//%u %u//%u",indices,indices+1,indices+2,indices+3,indices+4,indices+5);
+		else
+			sscanf((const char *)line,"f %u/%u/%u %u/%u/%u %u/%u/%u",indices,indices+6,indices+1,indices+2,indices+7,indices+3,indices+4,indices+8,indices+5);
 		f.indexes[0] = *indices - 1;
 		f.indexes[1] = *(indices+2) - 1;
 		f.indexes[2] = *(indices+4) - 1;
@@ -100,6 +108,9 @@ bool LoadObjFile(U8 * model_file, VertexArray & varray)
 
 bool LoadObjFile(U8 * model_file, Mesh & mesh)
 {
+	static VertexArray::iterator i;
+	
+
 	U8 buffer[128];
 
 	FILE * f = fopen((const char *)model_file,"r");
@@ -110,6 +121,29 @@ bool LoadObjFile(U8 * model_file, Mesh & mesh)
 	{
 		LoadObjFileStateMachine(buffer,mesh);
 	}
+
+	/*
+	Bounding sphere building
+	*/
+	Vector3 mean;
+	for (i=mesh.vertices.begin();i!=mesh.vertices.end();i++)
+		mean += *i;
+
+	mean /= (REAL)mesh.vertices.size();
+	mesh.boundingsphere.center = mean;
+
+	REAL max_dist=0;
+	REAL d;
+	Vector3 dist_to_point;
+	for (i=mesh.vertices.begin();i!=mesh.vertices.end();i++)
+	{
+		dist_to_point = (*i)-mean;
+		d = dist_to_point.Length2();
+		if (d>=max_dist)
+			max_dist = d;
+	}
+
+	mesh.boundingsphere.radius = sqrt_real(max_dist);
 
 	return true;
 }

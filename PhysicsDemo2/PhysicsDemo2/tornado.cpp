@@ -16,6 +16,7 @@ void TornadoEngine::render()
 	const int grid_size = 20;
 	const int grid_step = 1;
 	static REAL theta=0.0;
+	static REAL height=0.0;
 
 	TornadoEngine * engine = GetInstance();
 	
@@ -29,12 +30,18 @@ void TornadoEngine::render()
 	
 	if ((GetKeyState(VK_RIGHT)&0x8000)!=0)		
 		theta-=1.0;			
+
+	if ((GetKeyState(VK_UP)&0x8000)!=0)		
+		height-=0.1;
 	
+	if ((GetKeyState(VK_DOWN)&0x8000)!=0)		
+		height+=0.1;	
+
 	glRotatef(theta,0.0,1.0,0.0);
+	glTranslatef(0.0,height,0.0);
 
 	glLineStipple(1,0xF0F0);
 	glEnable(GL_LINE_STIPPLE);
-	glLineWidth(1.0);
 	glBegin(GL_LINES);
 	{
 		glColor3f(0.5,0.5,0.5);
@@ -55,8 +62,6 @@ void TornadoEngine::render()
 	glutWireCube(grid_step);
 	glDisable(GL_LINE_STIPPLE);
 
-
-	glLineWidth(2.0);
 	glPushMatrix();
 	engine->scene->Render();
 	glPopMatrix();
@@ -221,13 +226,22 @@ void TornadoEngine::DrawMesh(Mesh & mesh)
 
 	glPushMatrix();
 	glBegin(GL_TRIANGLES);
-	glColor3f(0.0,0.0,1.0);
+	glColor3f(1.0,0.0,1.0);
 	for (i=mesh.faces.begin();i!=mesh.faces.end();i++)
 	{
 		glVertex3fv(mesh.vertices.at(i->indexes[0]).values);
 		glVertex3fv(mesh.vertices.at(i->indexes[1]).values);
 		glVertex3fv(mesh.vertices.at(i->indexes[2]).values);
 	}
+
+	glTranslatef(
+		mesh.boundingsphere.center.x,
+		mesh.boundingsphere.center.y,
+		mesh.boundingsphere.center.z
+		);
+	glColor3f(0.0,0.0,1.0);
+	glutWireSphere(mesh.boundingsphere.radius,16,16);
+
 	glEnd();	
 	glPopMatrix();
 }
