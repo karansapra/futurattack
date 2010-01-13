@@ -287,6 +287,11 @@ struct Mesh
 		Vector3 center;
 		REAL radius;
 	};
+	struct AABB
+	{
+		Vector3 center;
+		Vector3 widths;
+	};
 	struct Face
 	{
 		U32 indexes[3];
@@ -300,6 +305,9 @@ struct Mesh
 	VertexArray texcoords;
 	FaceArray faces;
 	BoundingSphere boundingsphere;
+	AABB aabb;
 };
+
+void ComputeMinkowskiDifference(Mesh & a, Mesh & b, VertexArray & diff);
 
 #endif

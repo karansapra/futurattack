@@ -30,6 +30,9 @@ class MyScene : public IRenderable
 	RigidBody car;
 
 	Mesh mesh;
+	Mesh terrain;
+
+	VertexArray minko;
 
 public:
 	MyScene()
@@ -37,6 +40,7 @@ public:
 		tornado = TornadoEngine::GetInstance();
 
 		LoadObjFile((U8*)"untitled.obj",mesh);
+		LoadObjFile((U8*)"terrain.obj",terrain);
 
 		car.SetSphereInertiaTensor(1.0,10.0);
 		car.SetDampingCoefficients(0.7,0.7);
@@ -46,18 +50,19 @@ public:
 	}
 
 	void PreRender()
-	{		
+	{
 		Vector3 dir = car.transform.TransformDirection(Vector3(0,0,-10));
 		Vector3 newpos = car.position;		
 		dir = newpos-dir;
-		dir.y = 5;
-
+		dir.y = 3.5;
+		
 		gluLookAt(
 			dir.x,dir.y,dir.z,
 			newpos.x,newpos.y,newpos.z,
 			0.0,1.0,0.0
 			);
 	}
+	
 	
 
 	void Render()
@@ -117,7 +122,7 @@ public:
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
 
-		GLfloat position[] = {0.0,80.0,0.0,1.0};
+		GLfloat position[] = {0.0,200.0,0.0,1.0};
 		GLfloat ambdif[] = {0.7,0.7,0.7,1.0};
 		GLfloat specular[] = {1.0,1.0,1.0,1.0};
 
@@ -138,8 +143,15 @@ public:
 		car.transform.FillOpenGLMatrix(matrix);
 		glPushMatrix();
 		glMultMatrixf(matrix);
-		tornado->DrawMesh(mesh);
+		tornado->DrawMeshAndAABB(mesh);
 		glPopMatrix();
+
+		//tornado->SetWireframeState(true);
+		tornado->DrawMeshAndAABB(terrain);
+		tornado->SetWireframeState(false);
+
+		//minko.clear();
+		//ComputeMinkowskiDifference(terrain,mesh,minko);
 	}
 };
 

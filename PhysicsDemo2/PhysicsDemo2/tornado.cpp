@@ -255,6 +255,46 @@ void TornadoEngine::DrawMesh(Mesh & mesh)
 	glPopMatrix();
 }
 
+void TornadoEngine::DrawMeshAndAABB(Mesh & mesh)
+{
+	static Mesh::FaceArray::iterator i;
+
+	glPushMatrix();
+	glBegin(GL_TRIANGLES);
+	glColor3f(1.0,0.0,1.0);
+
+	for (i=mesh.faces.begin();i!=mesh.faces.end();i++)
+	{
+		glNormal3fv(mesh.normals.at(i->nindexes[0]).values);
+		glVertex3fv(mesh.vertices.at(i->indexes[0]).values);
+		glNormal3fv(mesh.normals.at(i->nindexes[1]).values);
+		glVertex3fv(mesh.vertices.at(i->indexes[1]).values);
+		glNormal3fv(mesh.normals.at(i->nindexes[2]).values);
+		glVertex3fv(mesh.vertices.at(i->indexes[2]).values);
+	}
+	glEnd();
+
+	glColor3f(1.0,1.0,1.0);
+	
+	glPushMatrix();
+	glTranslatef(
+		mesh.aabb.center.x,
+		mesh.aabb.center.y,
+		mesh.aabb.center.z
+		);
+	glScalef(
+		mesh.aabb.widths.x,
+		mesh.aabb.widths.y,
+		mesh.aabb.widths.z
+		);
+	glDisable(GL_LIGHTING);
+	glColor3f(1.0,0.0,1.0);
+	glutWireCube(1.0);
+	glPopMatrix();	
+	glPopMatrix();
+	glEnable(GL_LIGHTING);
+}
+
 REAL TornadoEngine::GetTime()
 {
 	static LARGE_INTEGER counter;
