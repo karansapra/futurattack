@@ -280,20 +280,25 @@ Vector3 WorldToLocalTransform(const Vector3 &world, const HomogenousMatrix44 &tr
 
 typedef std::vector<Vector3> VertexArray;
 
-
-
-
-
 struct Mesh
 {
+	struct BoundingSphere
+	{
+		Vector3 center;
+		REAL radius;
+	};
 	struct Face
 	{
 		U32 indexes[3];
 	};	
 	typedef std::vector<Face> FaceArray;
 
+
 	VertexArray vertices;
+	VertexArray normals;
+	VertexArray texcoords;
 	FaceArray faces;
+	BoundingSphere boundingsphere;
 };
 
 #endif
