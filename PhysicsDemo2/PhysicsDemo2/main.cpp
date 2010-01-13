@@ -27,8 +27,7 @@ class MyScene : public IRenderable
 	Buoyancy b;
 	
 	World physic_world;
-	RigidBody body1;
-	RigidBody body2;
+	RigidBody car;
 
 	Mesh mesh;
 
@@ -37,35 +36,24 @@ public:
 	{
 		tornado = TornadoEngine::GetInstance();
 
-		LoadObjFile((U8*)"mini_obj.obj",mesh);
+		LoadObjFile((U8*)"untitled.obj",mesh);
 
-		body1.position = Vector3(3,2,0);
-		body1.SetSphereInertiaTensor(2,2);
-		body1.SetDampingCoefficients(0.8,0.8);
+		car.SetSphereInertiaTensor(1.0,10.0);
+		car.SetDampingCoefficients(0.7,0.7);
 
-		body2.position = Vector3(0,1,0);
-		body2.SetSphereInertiaTensor(1,1);
-		body2.SetDampingCoefficients(0.9,0.9);
+		physic_world.AddBody(car);
 
-		physic_world.AddBody(body1);
-		physic_world.AddBody(body2);
-
-		b = Buoyancy(Vector3(0.5,0,0),4,0.005,4.5);
-		
-		physic_world.fregistry.Add(body1,b);
-		//physic_world.fregistry.Add(body2,b);
-
-		//physic_world.fregistry.Add(body1,g);
-		//physic_world.fregistry.Add(body2,g);
 	}
 
 	void PreRender()
 	{		
-		Vector3 newpos = body1.position+body2.position;
-		newpos /= 2.0f;
+		Vector3 dir = car.transform.TransformDirection(Vector3(0,0,-10));
+		Vector3 newpos = car.position;		
+		dir = newpos-dir;
+		dir.y = 5;
 
 		gluLookAt(
-			10.0,10.0,20.0,
+			dir.x,dir.y,dir.z,
 			newpos.x,newpos.y,newpos.z,
 			0.0,1.0,0.0
 			);
@@ -83,27 +71,15 @@ public:
 		{
 			if ((jinfos.Buttons&XB360_A)!=0)
 			{
-				Vector3 torque(0,100,0);
-				body1.AddTorque(torque);
+				car.AddForceAtBodyPointAndForceInBodySpace(Vector3(),Vector3(0,0,-150));
 			}
-			if ((jinfos.Buttons&XB360_B)!=0)
+			if ((jinfos.Buttons&XB360_X)!=0)
 			{
-				Vector3 torque(0,-100,0);
-				body1.AddTorque(torque);
+				car.AddForceAtBodyPointAndForceInBodySpace(Vector3(),Vector3(0,0,150));
 			}
 
 			REAL threshold = 65535.0f/2.0f;
 
-			REAL yforce = jinfos.analogA.y;
-			if (yforce<threshold*0.8 || yforce>threshold*1.2)
-			{
-				yforce -= 65535.0f/2.0f;
-				yforce /= -2000.0f;
-			} else
-			{
-				yforce = 0;
-			}
-				
 			REAL xforce = jinfos.analogA.x;
 			if (xforce<threshold*0.8 || xforce>threshold*1.2)
 			{
@@ -113,9 +89,11 @@ public:
 			{
 				xforce = 0;
 			}
+			car.AddForceAtBodyPointAndForceInBodySpace(Vector3(0,0,-2),Vector3(xforce,0,0));
 
-			body2.AddForceAtBodyPoint(Vector3(0,0,0),Vector3(xforce,yforce,0));
 		}
+
+		
 
 		//tornado->DrawLine(body1.transform.TransformDirection(body1.GetTorqueAccumulatorValue()),body1.position);
 
@@ -136,24 +114,32 @@ public:
 		*/
 		GLfloat matrix[16];
 
-		body1.transform.FillOpenGLMatrix(matrix);
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+
+		GLfloat position[] = {0.0,80.0,0.0,1.0};
+		GLfloat ambdif[] = {0.7,0.7,0.7,1.0};
+		GLfloat specular[] = {1.0,1.0,1.0,1.0};
+
+		glShadeModel(GL_SMOOTH);
 		glPushMatrix();
-		glMultMatrixf(matrix);
-		tornado->DrawSphere(2);
+		glLightfv(GL_LIGHT0,GL_POSITION,position);
+		glLightfv(GL_LIGHT0,GL_AMBIENT,ambdif);
+		glLightfv(GL_LIGHT0,GL_DIFFUSE,ambdif);
+		glLightfv(GL_LIGHT0,GL_SPECULAR,specular);
 		glPopMatrix();
 
-		body2.transform.FillOpenGLMatrix(matrix);
+		glEnable(GL_NORMALIZE);
+		//glEnable(GL_COLOR_MATERIAL);
+		glColorMaterial(GL_FRONT,GL_AMBIENT_AND_DIFFUSE);
+		glMateriali(GL_FRONT,GL_SHININESS,10);
+		glMaterialfv(GL_FRONT,GL_SPECULAR,specular);
+
+		car.transform.FillOpenGLMatrix(matrix);
 		glPushMatrix();
 		glMultMatrixf(matrix);
-		tornado->DrawSphere(1);
-		glPopMatrix();
-
-		tornado->SetWireframeState(true);
-		glPushMatrix();
 		tornado->DrawMesh(mesh);
 		glPopMatrix();
-		tornado->SetWireframeState(false);
-
 	}
 };
 

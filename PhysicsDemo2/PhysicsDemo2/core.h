@@ -290,6 +290,7 @@ struct Mesh
 	struct Face
 	{
 		U32 indexes[3];
+		U32 nindexes[3];
 	};	
 	typedef std::vector<Face> FaceArray;
 
