@@ -128,6 +128,7 @@ public:
 	void DrawCube(REAL size, Vector3 & center=Vector3());
 	void DrawVertexArray(VertexArray & varray);
 	void DrawMesh(Mesh & mesh);
+	void DrawMeshAndAABB(Mesh & mesh);
 
 	void SetWireframeState(bool enabled);
 

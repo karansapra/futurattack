@@ -155,5 +155,31 @@ bool LoadObjFile(U8 * model_file, Mesh & mesh)
 
 	mesh.boundingsphere.radius = sqrt_real(max_dist);
 
+	/*
+	AABB Computing
+	*/
+	Vector3 maxs, mins;
+	maxs = mesh.vertices[0];
+	mins = mesh.vertices[0];
+	for (i=mesh.vertices.begin();i!=mesh.vertices.end();i++)
+	{
+		if (i->x > maxs.x)
+			maxs.x = i->x;
+		if (i->y > maxs.y)
+			maxs.y = i->y;
+		if (i->z > maxs.z)
+			maxs.z = i->z;
+
+		if (i->x < mins.x)
+			mins.x = i->x;
+		if (i->y < mins.y)
+			mins.y = i->y;
+		if (i->z < mins.z)
+			mins.z = i->z;
+	}
+	
+	mesh.aabb.center = (maxs+mins)/2;
+	mesh.aabb.widths = maxs-mins;
+
 	return true;
 }

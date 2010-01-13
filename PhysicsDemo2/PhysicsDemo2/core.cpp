@@ -521,8 +521,6 @@ Vector3 HomogenousMatrix44::TransformDirection(const Vector3 & direction) const
 }
 
 
-
-
 Vector3 LocalToWorldTransform(const Vector3 &local, const HomogenousMatrix44 &transform)
 {
 	return transform * local;
@@ -535,3 +533,11 @@ Vector3 WorldToLocalTransform(const Vector3 &world, const HomogenousMatrix44 &tr
 	return inverse*world;
 }
 
+void ComputeMinkowskiDifference(Mesh & a, Mesh & b, VertexArray & diff)
+{
+	static VertexArray::iterator i,j;
+	
+	for (i=a.vertices.begin();i!=a.vertices.end();i++)
+		for (j=b.vertices.begin();j!=b.vertices.end();j++)
+			diff.push_back(Vector3(*i-*j));
+}
