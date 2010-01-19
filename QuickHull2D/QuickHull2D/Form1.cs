@@ -11,7 +11,7 @@ namespace QuickHull2D
 {    
     public partial class main_window : Form
     {
-        const uint NPOINTS = 64;
+        const uint NPOINTS = 4;
 
         Vector2[] points = new Vector2[NPOINTS];
         List<Vector2> point_set = new List<Vector2>((int)NPOINTS);
@@ -151,6 +151,8 @@ namespace QuickHull2D
             {
                 g.DrawLine(Pens.GreenYellow, edge.A.x, edge.A.y, edge.B.x, edge.B.y);
             }
+
+            qhull.Enabled = false;
         }
     }
 }
