@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(main_window));
             this.canvas = new System.Windows.Forms.Panel();
             this.qhull = new System.Windows.Forms.Button();
             this.generate = new System.Windows.Forms.Button();
@@ -70,6 +71,8 @@
             this.Controls.Add(this.generate);
             this.Controls.Add(this.qhull);
             this.Controls.Add(this.canvas);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "main_window";
             this.Text = "QuickHull2D - C.Jacob";
             this.ResumeLayout(false);
