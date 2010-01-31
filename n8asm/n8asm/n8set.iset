@@ -1,0 +1,7 @@
+#ISETFILE
+#NAME:N8 Instruction Set v0.1
+MOV 	R,R 			0000 0001		aa00 0000 0000		bb00 0000 0000
+MOV 	R,M 			0000 0010		aa00 0000 bbbb		bbbb bbbb bbbb
+MOV 	I,R 			0000 0011		aaaa aaaa 0000		bb00 0000 0000
+NOP		0,0				0000 0000		0000 0000 0000		0000 0000 0000
+JMP		C,0				0000 0100		aaaa aaaa aaaa		0000 0000 0000
