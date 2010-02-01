@@ -49,7 +49,7 @@ unsigned int str32_to_bin(String str32)
 	if (str32.size()>32)
 		return 0;
 
-	for (int i=0;i<32-str32.size();i++)
+	for (unsigned int i=0;i<32-str32.size();i++)
 		s += "0";
 	s+= str32;
 	str32 = s;
