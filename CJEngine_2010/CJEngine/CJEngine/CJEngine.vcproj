@@ -115,7 +115,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -133,7 +133,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="1"
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -179,6 +179,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FX.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Resource.cpp"
 				>
 			</File>
@@ -221,11 +225,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Core.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Core.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Font.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FX.h"
 				>
 			</File>
 			<File
@@ -278,7 +290,19 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+			<File
+				RelativePath=".\blur.frag"
+				>
+			</File>
+			<File
+				RelativePath=".\blur.vert"
+				>
+			</File>
 		</Filter>
+		<File
+			RelativePath=".\ClassDiagram1.cd"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

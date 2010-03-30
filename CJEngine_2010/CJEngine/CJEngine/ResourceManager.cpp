@@ -25,3 +25,10 @@ Texture * ResourceManager::AddTexture(const char * name)
 	resources_.push_back(texture);
 	return texture;
 }
+
+FX * ResourceManager::AddEffect(const char * vert_sh_file, const char * frag_sh_file)
+{
+	FX * fx = new FX(vert_sh_file, frag_sh_file);
+	resources_.push_back(fx);
+	return fx;
+}
