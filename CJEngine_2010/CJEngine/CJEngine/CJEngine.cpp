@@ -54,6 +54,20 @@ void CJEngine::Init(Vector2<unsigned int> resolution)
 	wglMakeCurrent(hdc,hglrc);
 
 	/*
+	GL EXTENSIONS
+	*/
+	glCreateShader = (PFNGLCREATESHADERPROC)wglGetProcAddress("glCreateShader");
+	glDeleteShader = (PFNGLDELETESHADERPROC)wglGetProcAddress("glDeleteShader");
+	glShaderSource = (PFNGLSHADERSOURCEPROC)wglGetProcAddress("glShaderSource");
+	glCompileShader = (PFNGLCOMPILESHADERPROC)wglGetProcAddress("glCompileShader");
+	glCreateProgram = (PFNGLCREATEPROGRAMPROC)wglGetProcAddress("glCreateProgram");
+	glAttachShader = (PFNGLATTACHSHADERPROC)wglGetProcAddress("glAttachShader");
+	glLinkProgram = (PFNGLLINKPROGRAMPROC)wglGetProcAddress("glLinkProgram");
+	glValidateProgram = (PFNGLVALIDATEPROGRAMPROC)wglGetProcAddress("glValidateProgram");
+	glUseProgram = (PFNGLUSEPROGRAMPROC)wglGetProcAddress("glUseProgram");
+	glGetShaderiv = (PFNGLGETSHADERIVPROC)wglGetProcAddress("glGetShaderiv");
+
+	/*
 	OpenGL Default Values
 	*/
 	glMatrixMode(GL_PROJECTION);
@@ -63,7 +77,7 @@ void CJEngine::Init(Vector2<unsigned int> resolution)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	builtin_font_ = new Font("Berlin Sans FB Demi",14);
+	builtin_font_ = new Font("Arial",12);
 
 	ShowWindow(window_handle_,SW_SHOW);
 	UpdateWindow(window_handle_);

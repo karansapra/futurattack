@@ -31,18 +31,72 @@ class CJEngine
 	SceneGraphManager * scene_graph_mgr_;
 
 public:	
+	/*
+	Returns the unique instance of the engine (Singleton)
+	*/
 	static CJEngine * Instance();
+
+	/*
+	Initializes the engine, should be called at the top of your code
+	*/
 	void Init(Vector2<unsigned int> resolution = Vector2<unsigned int>(800,600));
+
+	/*
+	Returns the resource manager. Can load plethora of files, like
+	music, pictures
+	*/
 	ResourceManager * GetResourceManager();
+
+	/*
+	Returns the graph manager of the engine. Permits
+	to add new nodes to render, special nodes, like
+	effects nodes
+	*/
 	SceneGraphManager * GetSceneGraphManager();
+
+	/*
+	Returns the default font of the engine, Arial 12
+	*/
 	Font * GetBuiltInFont();
+
+	/*
+	Set the max rendering frequency
+	*/
 	void SetFPSLimit(float fps);
+
+	/*
+	Returns the seconds elapsed since the first run
+	of the engine (Run)
+	*/
 	double GetElapsedTime();
+
+	/*
+	Runs one cycle of the engine
+	*/
 	bool Run();
+
+	/*
+	Allow rendering
+	*/
 	void BeginRender();
+
+	/*
+	Terminate rendering
+	*/
 	void EndRender();
+
+	/*
+	Returns a random number in range [-1 ; 1]
+	*/
 	float GetRandomNumber();
+
+	/*
+	Registers a new listener
+	*/
 	void RegisterEventListener(const IEventListener & event_listener);
 	
-	~CJEngine(void);	//Destructor
+	/*
+	Destroy the engine
+	*/
+	~CJEngine(void);
 };

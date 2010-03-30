@@ -1,3 +1,4 @@
+#include <math.h>
 #include "./CJEngine.h"
 
 class App : public IEventListener
@@ -11,6 +12,9 @@ class App : public IEventListener
 	SpriteNode * Ball;
 	SpriteNode * LBox;
 	SpriteNode * RBox;
+	SpriteNode * Logo;
+	SpriteNode * Winner;
+	SpriteNode * Looser;
 
 	TextNode * Score;
 	TextNode * Time;
@@ -18,7 +22,12 @@ class App : public IEventListener
 	Texture * wall_texture;
 	Texture * box_texture;
 	Texture * ball_texture;
+	Texture * logo_cjengine;
+	Texture * winner_texture;
+	Texture * looser_texture;
 
+	FX * blur;
+	
 	Vector2<float> ball_speed;
 
 	float box_size;
@@ -48,9 +57,10 @@ public:
 			} else
 			{
 				//IA misses the ball
-				Ball->Translation = Vector2<float>(0,0);
+				Ball->Translation = Vector2<float>(0,150.0f*engine->GetRandomNumber());
 				ball_speed = ball_speed*-1;
 				human_score+=5;
+				//Winner->Visible = true;
 				State = ENTERPAUSE;
 			}
 		} else
@@ -64,9 +74,10 @@ public:
 			} else
 			{
 				//Human misses the ball
-				Ball->Translation = Vector2<float>(0,0);
+				Ball->Translation = Vector2<float>(0,150.0f*engine->GetRandomNumber());
 				ball_speed = ball_speed*-1;
 				cpu_score+=5;
+				//Looser->Visible = true;
 				State = ENTERPAUSE;
 			}
 		}
@@ -85,7 +96,7 @@ public:
 		if ((Ball->Translation-RBox->Translation).Abs2()>150000 || (Ball->Translation-RBox->Translation).Abs2()<2000)
 			return;
 		
-		float dy = RBox->Translation.Y - (Ball->Translation+ball_speed*2).Y;
+		float dy = RBox->Translation.Y - (Ball->Translation-ball_speed).Y;
 		if (dy>0)
 		{
 			if (RBox->Translation.Y>-(250-(box_size)/2))
@@ -102,9 +113,17 @@ public:
 		}
 	}
 
+	void Animation()
+	{
+		double t = engine->GetElapsedTime();
+		Logo->Rotation = 35.0f*(float)sin(2*3.14*t/7.0);
+	}
+
 	void GameplayFSM()
 	{		
 		static double t0 = engine->GetElapsedTime();
+
+		Animation();
 
 		switch (State)
 		{
@@ -114,6 +133,8 @@ public:
 			break;
 
 		case GAME:
+			Looser->Visible = false;
+			Winner->Visible = false;
 			BallPhysics();
 			IA();
 			break;
@@ -151,12 +172,22 @@ public:
 		box_texture = rsm->AddTexture("./box.png");
 		ball_texture = rsm->AddTexture("./ball.png");
 		wall_texture = rsm->AddTexture("./wall.png");
+		logo_cjengine = rsm->AddTexture("./cjengine.png");
+		winner_texture = rsm->AddTexture("./Winner.png");
+		looser_texture = rsm->AddTexture("./Looser.png");
+		blur = rsm->AddEffect("blur.vert","blur.frag");
 
 		NWall = sgm->AddSpriteNode();
 		SWall = sgm->AddSpriteNode();
 		Ball = sgm->AddSpriteNode();
 		LBox = sgm->AddSpriteNode();
 		RBox = sgm->AddSpriteNode();
+		Logo = sgm->AddSpriteNode();
+		Winner = sgm->AddSpriteNode();
+		Looser = sgm->AddSpriteNode();
+
+		LBox->AddEffect(*blur);
+
 		Score = sgm->AddTextNode();
 		Time = sgm->AddTextNode();
 		
@@ -169,6 +200,15 @@ public:
 		LBox->Size.Y = box_size;
 		RBox->Translation.X = 350;
 		RBox->Size.Y = box_size;
+
+		Winner->Size = Vector2<float>(128,42);
+		Winner->Visible = false;
+		Looser->Size = Vector2<float>(128,43);
+		Looser->Visible = false;
+
+		Logo->AddTexture(*logo_cjengine);
+		Logo->Size = Vector2<float>(64,48);
+		Logo->Translation = Vector2<float>(300,-230);
 
 		Time->Translation.X = -350;
 		Time->Translation.Y = 285;
@@ -184,6 +224,8 @@ public:
 		Ball->AddTexture(*ball_texture);
 		LBox->AddTexture(*box_texture);
 		RBox->AddTexture(*box_texture);
+		Winner->AddTexture(*winner_texture);
+		Looser->AddTexture(*looser_texture);
 
 		human_score = 0;
 		cpu_score = 0;
@@ -199,15 +241,16 @@ public:
 			engine->BeginRender();
 			sprintf_s(buf,64,"Time:%.2lf",engine->GetElapsedTime());
 			Time->SetText(buf);
-			sprintf_s(buf,64,"Human:%d     IA:%d",human_score,cpu_score);			
+			
+			if (State!=FINISHED)
+				sprintf_s(buf,64,"Human:%d     AI:%d",human_score,cpu_score);
+			else
+				sprintf_s(buf,64,"Human:%d     AI:%d   --PAUSE--",human_score,cpu_score);
+
 			Score->SetText(buf);
 
 			sgm->RenderAllGraph();
-			///////////////////////////
-			//
-			// PLACE CODE HERE
-			//
-			///////////////////////////
+
 			engine->EndRender();
 		}		
 	}
@@ -231,7 +274,10 @@ public:
 		}
 		if ((evt.keystate[VK_SPACE]&0x80)!=0)
 		{
-
+			if ((evt.keystate[VK_SPACE]&0x01)==1)
+				State = FINISHED;
+			else
+				State = GAME;
 		}
 	}
 };
@@ -239,6 +285,5 @@ public:
 int main()
 {
 	App p;
-	system("PAUSE");
 	return 0;
 }
