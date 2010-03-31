@@ -186,7 +186,7 @@ public:
 		Winner = sgm->AddSpriteNode();
 		Looser = sgm->AddSpriteNode();
 
-		LBox->AddEffect(*blur);
+		//LBox->AddEffect(*blur);
 
 		Score = sgm->AddTextNode();
 		Time = sgm->AddTextNode();
@@ -239,6 +239,7 @@ public:
 			GameplayFSM();
 
 			engine->BeginRender();
+			blur->Enable();
 			sprintf_s(buf,64,"Time:%.2lf",engine->GetElapsedTime());
 			Time->SetText(buf);
 			
@@ -251,7 +252,9 @@ public:
 
 			sgm->RenderAllGraph();
 
+			//blur->Disable();
 			engine->EndRender();
+
 		}		
 	}
 
