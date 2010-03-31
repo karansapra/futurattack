@@ -1,3 +1,10 @@
+/*!
+ * \file CJEngine.h
+ * \brief Contains the CJEngine class definition
+ * \author Clément JACOB
+ *
+ */
+
 #pragma once
 #include "./Core.h"
 #include "./Vector2.h"
@@ -7,6 +14,18 @@
 #include "./Font.h"
 #include "./Handle.h"
 
+
+/*!
+ * \class CJEngine
+ * \brief Central class of the Engine
+ *
+ * CJEngine is the central class of the engine. You can
+ * perform anything from this class. To obtain an instance
+ * of it, you should call the static method Instance(). Just
+ * after obtaining that unique instance, you should call
+ * Init() to perform initialization tasks, like window creation...
+ *
+ */
 class CJEngine
 {
 	friend class Font;
@@ -31,14 +50,21 @@ class CJEngine
 	SceneGraphManager * scene_graph_mgr_;
 
 public:	
-	/*
-	Returns the unique instance of the engine (Singleton)
-	*/
+	/*!	
+	 * \brief Unique instance of CJEngine
+	 * 
+	 * The first time it's called, you should configure the engine
+	 * returned by the the Init() method
+	 *
+	 * \return The pointer to the unique instance of CJEngine
+	 * 
+	 */
 	static CJEngine * Instance();
 
-	/*
-	Initializes the engine, should be called at the top of your code
-	*/
+	/*!	
+	 * \brief Unique instance of CJEngine
+	 * \return The pointer to the unique instance of CJEngine
+	 */
 	void Init(Vector2<unsigned int> resolution = Vector2<unsigned int>(800,600));
 
 	/*

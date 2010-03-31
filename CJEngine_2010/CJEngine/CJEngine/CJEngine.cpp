@@ -72,10 +72,12 @@ void CJEngine::Init(Vector2<unsigned int> resolution)
 	*/
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();	
+	//glOrtho(-resolution_.X/2,resolution_.X/2,-resolution_.Y/2,resolution_.Y/2,1.0,1000.0);
 	gluOrtho2D(-resolution_.X/2,resolution_.X/2,-resolution_.Y/2,resolution_.Y/2);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	//gluLookAt(0.0,0.0,10.0,0.0,0.0,0.0,0.0,1.0,0.0);
 
 	builtin_font_ = new Font("Arial",12);
 

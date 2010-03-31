@@ -27,7 +27,7 @@ FX::FX(const char * vert_fx, const char * frag_fx)
 		char * lines[1];
 		lines[0] = frag_src;
 		printf("FRAG SHADER:\n%s\n\n",frag_src);
-		frag_shader_ = glCreateShader(GL_FRAGMENT_SHADER);		
+		frag_shader_ = glCreateShader(GL_FRAGMENT_SHADER);
 		glShaderSource(frag_shader_,1,(const GLchar**)lines,NULL);
 		glCompileShader(frag_shader_);
 		GLint status;
