@@ -18,6 +18,7 @@ class App : public IEventListener
 
 	TextNode * Score;
 	TextNode * Time;
+	EffectNode * Effect;
 
 	Texture * wall_texture;
 	Texture * box_texture;
@@ -37,21 +38,30 @@ class App : public IEventListener
 
 	enum STATE {PAUSE, GAME, ENTERPAUSE, FINISHED};
 	STATE State;
+	float dt;
 
 public:
 	void BallPhysics()
 	{
 		Ball->Rotation += 25;
-		Ball->Translation += ball_speed;
-		if (Ball->Translation.Y>250||Ball->Translation.Y<-250)
+		Ball->Translation += ball_speed *dt;
+		
+		if (Ball->Translation.Y>250)
 		{
+			Ball->Translation.Y = 250;
+			ball_speed.Y = -ball_speed.Y;
+		} else if(Ball->Translation.Y<-250)
+		{
+			Ball->Translation.Y = -250;
 			ball_speed.Y = -ball_speed.Y;
 		}
+
 		if (Ball->Translation.X>330)
 		{
 			if ((Ball->Translation-RBox->Translation).Abs2()<(box_size+20)*(box_size+20)/4)
 			{
 				//IA touches the ball
+				Ball->Translation.X=330;
 				ball_speed.X = -ball_speed.X;
 				cpu_score++;
 			} else
@@ -69,6 +79,7 @@ public:
 			if ((Ball->Translation-LBox->Translation).Abs2()<(box_size+20)*(box_size+20)/4)
 			{
 				//Human touches the ball
+				Ball->Translation.X=-330;
 				ball_speed.X = -ball_speed.X;
 				human_score++;
 			} else
@@ -96,19 +107,19 @@ public:
 		if ((Ball->Translation-RBox->Translation).Abs2()>150000 || (Ball->Translation-RBox->Translation).Abs2()<2000)
 			return;
 		
-		float dy = RBox->Translation.Y - (Ball->Translation-ball_speed).Y;
+		float dy = RBox->Translation.Y - (Ball->Translation-ball_speed*dt).Y;
 		if (dy>0)
 		{
 			if (RBox->Translation.Y>-(250-(box_size)/2))
 			{
-				RBox->Translation.Y-=15;
+				RBox->Translation.Y-=650*dt;
 			}
 		}
 		else
 		{
 			if (RBox->Translation.Y<(250-(box_size)/2))
 			{
-				RBox->Translation.Y+=15;
+				RBox->Translation.Y+=650*dt;
 			}
 		}
 	}
@@ -122,6 +133,10 @@ public:
 	void GameplayFSM()
 	{		
 		static double t0 = engine->GetElapsedTime();
+		static float t = (float)engine->GetElapsedTime();
+		float nt = (float)engine->GetElapsedTime();
+		dt = nt-t;
+		t = nt;
 
 		Animation();
 
@@ -164,7 +179,6 @@ public:
 
 		engine = CJEngine::Instance();
 		engine->Init();
-		engine->SetFPSLimit(60);
 		engine->RegisterEventListener(*this);
 		sgm = engine->GetSceneGraphManager();
 		rsm = engine->GetResourceManager();
@@ -177,15 +191,18 @@ public:
 		looser_texture = rsm->AddTexture("./Looser.png");
 		blur = rsm->AddEffect("blur.vert","blur.frag");
 
+		Effect = sgm->AddEffectNode();
+		Effect->SetEffect(*blur);
+
 		NWall = sgm->AddSpriteNode();
-		SWall = sgm->AddSpriteNode();
-		Ball = sgm->AddSpriteNode();
+		SWall = sgm->AddSpriteNode();		
+		Ball = sgm->AddSpriteNode((SceneNode&)*Effect);
 		LBox = sgm->AddSpriteNode();
 		RBox = sgm->AddSpriteNode();
 		Logo = sgm->AddSpriteNode();
 		Winner = sgm->AddSpriteNode();
 		Looser = sgm->AddSpriteNode();
-
+		
 		//LBox->AddEffect(*blur);
 
 		Score = sgm->AddTextNode();
@@ -229,18 +246,17 @@ public:
 
 		human_score = 0;
 		cpu_score = 0;
-			
+
 		char buf[64];
 
-		ball_speed = Vector2<float>(6,7);
+		ball_speed = Vector2<float>(300,350);
 
 		while (engine->Run())
 		{
 			GameplayFSM();
 
 			engine->BeginRender();
-			blur->Enable();
-			sprintf_s(buf,64,"Time:%.2lf",engine->GetElapsedTime());
+			sprintf_s(buf,64,"FPS:%.2lf",engine->GetFPS());
 			Time->SetText(buf);
 			
 			if (State!=FINISHED)
@@ -252,9 +268,7 @@ public:
 
 			sgm->RenderAllGraph();
 
-			//blur->Disable();
 			engine->EndRender();
-
 		}		
 	}
 
@@ -268,12 +282,12 @@ public:
 		if ((evt.keystate[VK_UP]&0x80)!=0)
 		{
 			if (LBox->Translation.Y<(250-(box_size)/2))
-				LBox->Translation.Y+=10;
+				LBox->Translation.Y+=500*dt;
 		}
 		if ((evt.keystate[VK_DOWN]&0x80)!=0)
 		{
 			if (LBox->Translation.Y>-(250-(box_size)/2))
-				LBox->Translation.Y-=10;
+				LBox->Translation.Y-=500*dt;
 		}
 		if ((evt.keystate[VK_SPACE]&0x80)!=0)
 		{

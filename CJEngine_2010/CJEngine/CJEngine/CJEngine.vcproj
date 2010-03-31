@@ -175,6 +175,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\EffectNode.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Font.cpp"
 				>
 			</File>
@@ -230,6 +234,10 @@
 			</File>
 			<File
 				RelativePath=".\Core.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EffectNode.h"
 				>
 			</File>
 			<File

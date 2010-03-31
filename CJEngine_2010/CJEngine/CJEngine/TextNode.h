@@ -16,7 +16,8 @@ protected:
 	~TextNode(void);
 
 public:
-	virtual void DrawNode();
+	virtual void BeginRealization();
+	
 
 	void SetText(const char * text);
 };

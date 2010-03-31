@@ -12,7 +12,6 @@ class SpriteNode : public SceneNode
 	friend class SceneGraphManager;
 
 	Texture * texture_;
-	FX * fx_;
 
 protected:
 	SpriteNode(void);
@@ -20,11 +19,10 @@ protected:
 
 public:	
 	
-	virtual void DrawNode();
+	virtual void BeginRealization();
 
 	//Properties
 	Vector2<float> Size;	
 	void AddTexture(const Texture & texture);
-	void AddEffect(const FX & fx);
 	bool Visible;
 };

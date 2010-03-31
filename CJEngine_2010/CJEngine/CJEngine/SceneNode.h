@@ -27,7 +27,8 @@ public:
 	SceneNode * operator[](int i);	
 	
 	void Render();
-	virtual void DrawNode();
+	virtual void BeginRealization();
+	virtual void EndRealization();
 
 	//Properties
 	bool PropagateScaling;
