@@ -153,9 +153,9 @@ void CJEngine::EndRender()
 	ValidateRect(window_handle_,NULL);	
 }
 
-void CJEngine::SetFPSLimit(float fps)
+float CJEngine::GetFPS()
 {
-	FPS_ = fps;
+	return FPS_;
 }
 
 bool CJEngine::Run()
@@ -183,13 +183,14 @@ bool CJEngine::Run()
 	QueryPerformanceCounter(&ctr);
 	t1 = ctr.QuadPart;
 
-	while ((t1-t0)<(freq_/FPS_)) //FPS
-	{
-		QueryPerformanceCounter(&ctr);
-		t1 = ctr.QuadPart;
-	}
+	float dt = (float)(t1-t0);
+
+	if (dt!=0)
+		FPS_ = freq_/dt;
+
 	tnow_ = t1;
 	t0 = t1;
+
 
 	if (instance_->event_listener_)
 	{
@@ -197,14 +198,13 @@ bool CJEngine::Run()
 		instance_->event_listener_->OnEvent(evt);
 	}		
 
-	while (PeekMessage(&msg,NULL,0,0,PM_REMOVE)!=0)
+	if (PeekMessage(&msg,NULL,0,0,PM_REMOVE)!=0)
 	{
 		if (msg.message==WM_QUIT)
 			return false;
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-	}	
-
+	}
 	return true;
 }
 

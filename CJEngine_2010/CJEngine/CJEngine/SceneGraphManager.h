@@ -3,6 +3,7 @@
 #include "./SceneNode.h"
 #include "./SpriteNode.h"
 #include "./TextNode.h"
+#include "./EffectNode.h"
 
 class SceneGraphManager
 {
@@ -17,6 +18,9 @@ public:
 
 	TextNode * AddTextNode();
 	TextNode * AddTextNode(SceneNode & parent);
+
+	EffectNode * AddEffectNode();
+	EffectNode * AddEffectNode(SceneNode & parent);
 
 	void RemoveNode(SceneNode * node);
 

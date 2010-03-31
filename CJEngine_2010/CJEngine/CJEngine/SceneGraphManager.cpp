@@ -39,6 +39,20 @@ TextNode * SceneGraphManager::AddTextNode(SceneNode & parent)
 	return node;
 }
 
+EffectNode * SceneGraphManager::AddEffectNode()
+{
+	EffectNode * node = new EffectNode();
+	root_node_->AddChild(*node);
+	return node;
+}
+
+EffectNode * SceneGraphManager::AddEffectNode(SceneNode & parent)
+{
+	EffectNode * node = new EffectNode();
+	parent.AddChild(*node);
+	return node;	
+}
+
 void SceneGraphManager::RenderAllGraph()
 {
 	root_node_->Render();
@@ -63,3 +77,4 @@ void SceneGraphManager::RemoveNode(SceneNode * node)
 {
 	root_node_->RemoveChild(*node);
 }
+

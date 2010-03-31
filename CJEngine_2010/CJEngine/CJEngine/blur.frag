@@ -11,9 +11,11 @@ void main(void)
 
 	//gl_FragColor = vec4(1,1,1,1);
 	
+	/*
 	if (alti > 200.0f)
 		gl_FragColor = vec4(greyscale,greyscale,greyscale,txt_color.a);
 	else
-		gl_FragColor = txt_color;
-	
+		gl_FragColor = txt_color;		
+	*/
+	gl_FragColor = vec4(greyscale,greyscale,greyscale,txt_color.a);
 }

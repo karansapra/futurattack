@@ -13,7 +13,7 @@ TextNode::~TextNode(void)
 
 }
 
-void TextNode::DrawNode()
+void TextNode::BeginRealization()
 {
 	glColor3f(Color.X,Color.Y,Color.Z);
 	glRasterPos2i(0,0);	

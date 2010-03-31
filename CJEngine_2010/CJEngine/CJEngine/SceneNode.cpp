@@ -37,7 +37,11 @@ SceneNode * SceneNode::operator[](int i)
 	return childen_[i];
 }
 
-void SceneNode::DrawNode()
+void SceneNode::BeginRealization()
+{
+}
+
+void SceneNode::EndRealization()
 {
 }
 
@@ -51,19 +55,19 @@ void SceneNode::Render()
 	{
 		glPushMatrix();
 		glScalef(Scale.X,Scale.Y,1.0f);
-		DrawNode();
+		BeginRealization();
 		glPopMatrix();	
 	}
 	else
 	{
 		glScalef(Scale.X,Scale.Y,1.0f);
-		DrawNode();
+		BeginRealization();
 	}
-
-	
 
 	for (unsigned int i=0;i<ChildrenCount();i++)
 		(*this)[i]->Render();
+
+	EndRealization();
 
 	glPopMatrix();
 }

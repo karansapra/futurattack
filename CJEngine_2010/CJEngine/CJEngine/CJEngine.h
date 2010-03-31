@@ -88,7 +88,7 @@ public:
 	/*
 	Set the max rendering frequency
 	*/
-	void SetFPSLimit(float fps);
+	float GetFPS();
 
 	/*
 	Returns the seconds elapsed since the first run
