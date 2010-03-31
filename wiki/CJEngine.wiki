@@ -2,12 +2,10 @@
 
 = Introduction =
 
-Add your content here.
+CJEngine is a C++ OpenGL 2D Engine. It's main approach is "keep it as simple as possible". At the moment, it can render sprites, text and use OpenGL vertex and fragment shaders. The object oriented approach simplifies the development of simple games. As a sample, the package includes a Pong game.
 
+= Overview =
 
-= Details =
+Here is depicted the UML diagram of the engine.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+http://code.google.com/images/code_sm.png
