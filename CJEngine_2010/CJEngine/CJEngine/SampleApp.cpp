@@ -12,20 +12,14 @@ class App : public IEventListener
 	SpriteNode * Ball;
 	SpriteNode * LBox;
 	SpriteNode * RBox;
-	SpriteNode * Logo;
-	SpriteNode * Winner;
-	SpriteNode * Looser;
 
 	TextNode * Score;
 	TextNode * Time;
 	EffectNode * Effect;
 
-	Texture * wall_texture;
-	Texture * box_texture;
-	Texture * ball_texture;
-	Texture * logo_cjengine;
-	Texture * winner_texture;
-	Texture * looser_texture;
+	//Contains all sprites
+	Texture * sprites_texture;
+	Texture * horz_texture;
 
 	FX * blur;
 	
@@ -127,7 +121,6 @@ public:
 	void Animation()
 	{
 		double t = engine->GetElapsedTime();
-		Logo->Rotation = 35.0f*(float)sin(2*3.14*t/7.0);
 	}
 
 	void GameplayFSM()
@@ -148,8 +141,6 @@ public:
 			break;
 
 		case GAME:
-			Looser->Visible = false;
-			Winner->Visible = false;
 			BallPhysics();
 			IA();
 			break;
@@ -183,28 +174,43 @@ public:
 		sgm = engine->GetSceneGraphManager();
 		rsm = engine->GetResourceManager();
 
-		box_texture = rsm->AddTexture("./box.png");
-		ball_texture = rsm->AddTexture("./ball.png");
-		wall_texture = rsm->AddTexture("./wall.png");
-		logo_cjengine = rsm->AddTexture("./cjengine.png");
-		winner_texture = rsm->AddTexture("./Winner.png");
-		looser_texture = rsm->AddTexture("./Looser.png");
+		/*
+		Textures
+		*/
+		sprites_texture = rsm->AddTexture("./sprites.png");
+		horz_texture = rsm->AddTexture("./horz.png");
+
+		/*
+		FX Shaders
+		*/
 		blur = rsm->AddEffect("blur.vert","blur.frag");
 
 		Effect = sgm->AddEffectNode();
 		Effect->SetEffect(*blur);
 
 		NWall = sgm->AddSpriteNode();
-		SWall = sgm->AddSpriteNode();		
-		Ball = sgm->AddSpriteNode((SceneNode&)*Effect);
-		LBox = sgm->AddSpriteNode();
-		RBox = sgm->AddSpriteNode();
-		Logo = sgm->AddSpriteNode();
-		Winner = sgm->AddSpriteNode();
-		Looser = sgm->AddSpriteNode();
-		
-		//LBox->AddEffect(*blur);
+		NWall->TexCoord_TopLeft = Vector2<float>(0.0f,0.97f);
+		NWall->TexCoord_BottomRight = Vector2<float>(1.0f,1.0f);
 
+		SWall = sgm->AddSpriteNode();		
+		SWall->TexCoord_TopLeft = Vector2<float>(0.0f,0.97f);
+		SWall->TexCoord_BottomRight = Vector2<float>(1.0f,1.0f);
+
+		//Ball = sgm->AddSpriteNode((SceneNode&)*Effect);
+		Ball = sgm->AddSpriteNode();
+		Ball->TexCoord_TopLeft = Vector2<float>(0.0f,0.75f);
+		Ball->TexCoord_BottomRight = Vector2<float>(0.25f,1.0f);
+		
+		
+		LBox = sgm->AddSpriteNode();
+		LBox->TexCoord_TopLeft = Vector2<float>(0.25f,0.0f);
+		LBox->TexCoord_BottomRight = Vector2<float>(0.5f,1.0f);		
+
+		RBox = sgm->AddSpriteNode();
+		RBox->TexCoord_BottomRight = Vector2<float>(0.25f,0.0f);
+		RBox->TexCoord_TopLeft = Vector2<float>(0.5f,1.0f);		
+
+	
 		Score = sgm->AddTextNode();
 		Time = sgm->AddTextNode();
 		
@@ -218,15 +224,6 @@ public:
 		RBox->Translation.X = 350;
 		RBox->Size.Y = box_size;
 
-		Winner->Size = Vector2<float>(128,42);
-		Winner->Visible = false;
-		Looser->Size = Vector2<float>(128,43);
-		Looser->Visible = false;
-
-		Logo->AddTexture(*logo_cjengine);
-		Logo->Size = Vector2<float>(64,48);
-		Logo->Translation = Vector2<float>(300,-230);
-
 		Time->Translation.X = -350;
 		Time->Translation.Y = 285;
 
@@ -236,13 +233,11 @@ public:
 		/*
 		Textures
 		*/
-		NWall->AddTexture(*wall_texture);
-		SWall->AddTexture(*wall_texture);
-		Ball->AddTexture(*ball_texture);
-		LBox->AddTexture(*box_texture);
-		RBox->AddTexture(*box_texture);
-		Winner->AddTexture(*winner_texture);
-		Looser->AddTexture(*looser_texture);
+		NWall->AddTexture(*horz_texture);
+		SWall->AddTexture(*horz_texture);
+		Ball->AddTexture(*sprites_texture);
+		LBox->AddTexture(*sprites_texture);
+		RBox->AddTexture(*sprites_texture);
 
 		human_score = 0;
 		cpu_score = 0;

@@ -23,6 +23,8 @@ public:
 
 	//Properties
 	Vector2<float> Size;	
+	Vector2<float> TexCoord_TopLeft;
+	Vector2<float> TexCoord_BottomRight;
 	void AddTexture(const Texture & texture);
 	bool Visible;
 };

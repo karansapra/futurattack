@@ -21,7 +21,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="2"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -40,6 +40,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				UseUnicodeResponseFiles="true"
 				Optimization="0"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
@@ -175,7 +176,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Core.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\EffectNode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Exception.cpp"
 				>
 			</File>
 			<File
@@ -229,10 +238,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Core.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Core.h"
 				>
 			</File>
@@ -241,15 +246,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Exception.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Font.h"
 				>
 			</File>
 			<File
 				RelativePath=".\FX.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Handle.h"
 				>
 			</File>
 			<File
