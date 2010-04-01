@@ -13,12 +13,22 @@ Font::Font(const char * fontname, int size)
 	logfont.lfCharSet = ANSI_CHARSET;
 	strcpy_s(logfont.lfFaceName,32,fontname);
 	hfont = CreateFontIndirect(&logfont);
+	
+	if (hfont==NULL)
+		throw Exception("Font::Font : Can't create font");
+	
 	SelectObject(hdc,hfont);
 	gllist = glGenLists(128);
+
+	if (gllist==0)
+		throw Exception("Font::Font : Can't create font");
+
 	wglUseFontBitmaps(hdc,0,128,gllist);
 	DeleteObject(hfont);
 }
 
 Font::~Font(void)
 {
+	if (gllist!=0)
+		glDeleteLists(gllist,128);
 }

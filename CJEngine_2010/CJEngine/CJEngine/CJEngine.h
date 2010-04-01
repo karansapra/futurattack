@@ -12,7 +12,6 @@
 #include "./SceneGraphManager.h"
 #include "./ResourceManager.h"
 #include "./Font.h"
-#include "./Handle.h"
 
 
 /*!

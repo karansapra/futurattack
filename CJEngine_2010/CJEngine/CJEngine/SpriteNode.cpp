@@ -4,6 +4,8 @@
 SpriteNode::SpriteNode(void)
 {
 	Size = Vector2<float>(20,20);
+	TexCoord_TopLeft = Vector2<float>(0,0);
+	TexCoord_BottomRight = Vector2<float>(1,1);
 	texture_ = NULL;
 	Visible = true;
 }
@@ -43,16 +45,16 @@ void SpriteNode::BeginRealization()
 	glBegin(GL_QUADS);
 	glColor4f(Color.X,Color.Y,Color.Z,1.0f);
 	
-	glTexCoord2f(0.0f,1.0f);
+	glTexCoord2f(TexCoord_TopLeft.X,TexCoord_BottomRight.Y);
 	glVertex2f(-Size.X/2,-Size.Y/2);
 	
-	glTexCoord2f(0.0f,0.0f);
+	glTexCoord2f(TexCoord_TopLeft.X,TexCoord_TopLeft.Y);
 	glVertex2f(-Size.X/2,Size.Y/2);
 	
-	glTexCoord2f(1.0f,0.0f);
+	glTexCoord2f(TexCoord_BottomRight.X,TexCoord_TopLeft.Y);
 	glVertex2f(Size.X/2,Size.Y/2);
 
-	glTexCoord2f(1.0f,1.0f);
+	glTexCoord2f(TexCoord_BottomRight.X,TexCoord_BottomRight.Y);
 	glVertex2f(Size.X/2,-Size.Y/2);
 
 	glEnd();

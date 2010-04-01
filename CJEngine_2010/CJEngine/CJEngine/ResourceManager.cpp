@@ -32,3 +32,10 @@ FX * ResourceManager::AddEffect(const char * vert_sh_file, const char * frag_sh_
 	resources_.push_back(fx);
 	return fx;
 }
+
+Font * ResourceManager::AddFont(const char * fontname, int size)
+{
+	Font * font = new Font(fontname,size);
+	resources_.push_back(font);
+	return font;
+}

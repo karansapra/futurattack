@@ -4,7 +4,7 @@
 #include "./FX.h"
 
 class SceneGraphManager;
-class EffectNode : SceneNode
+class EffectNode : public SceneNode
 {
 	friend class SceneGraphManager;
 

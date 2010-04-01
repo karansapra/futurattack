@@ -9,6 +9,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "./glext.h"
+#include "./Exception.h"
 #include <gdiplus.h>
 
 extern PFNGLCREATESHADERPROC glCreateShader;
