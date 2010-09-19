@@ -54,7 +54,7 @@ public:
 	void Translate(USRVector3 & t)
 	{
 		USRMatrix tm = CreateTranslationMatrix(t);
-		USRMatrix res = tm * (*this);
+		USRMatrix res = (*this)*tm;
 		memcpy(_m,res._m,sizeof(float)*16);
 	}
 
@@ -145,13 +145,11 @@ public:
 
 		eye.Invert();
 		result.Translate(eye);
-
-		/*
+/*
 		result[12] = -(result[0]*eye.X + result[4]*eye.Y + result[8]*eye.Z);
 		result[13] = -(result[1]*eye.X + result[5]*eye.Y + result[9]*eye.Z);
 		result[14] = -(result[2]*eye.X + result[6]*eye.Y + result[10]*eye.Z);
-		*/
-
+*/
 		return result;
 	}
 
