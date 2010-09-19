@@ -16,11 +16,32 @@ public:
 protected:
 	virtual void paintEvent(QPaintEvent * evt);
 
-
 private:
-	vector<USRVector3> model;
+	struct USRTriangle
+	{
+		struct  
+		{
+			USRVector3 A;
+			USRVector3 B;
+			USRVector3 C;
+		};
+
+		USRTriangle()
+		{
+		}
+
+		USRTriangle(USRVector3 a, USRVector3 b, USRVector3 c)
+			: A(a), B(b), C(c)
+		{
+		}
+	};
+
+	vector<USRTriangle> model;
+	vector<USRTriangle> transformed_vertices;
 	USRMatrix Pipeline;
 	USRMatrix WindowMatrix;
+
+	USRVector3 Transform(USRVector3 & v);
 
 private slots:
 	void Timeout();
