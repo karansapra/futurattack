@@ -13,13 +13,11 @@ USRView::USRView()
 		USRVector3(0,1,0)
 		));
 
-	
 	model.push_back(USRTriangle(
-		USRVector3(1,0,0),
-		USRVector3(1,1,0),
-		USRVector3(0,1,0)
+		USRVector3(0,0,0),
+		USRVector3(0,1,0),
+		USRVector3(0,0,1)
 		));
-	
 
 	model.push_back(USRTriangle(
 		USRVector3(0,0,0),
@@ -33,7 +31,7 @@ USRView::USRView()
 
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(Timeout()));
-	timer->start(120);
+	timer->start(40);
 }
 
 void USRView::paintEvent( QPaintEvent * evt )
@@ -48,12 +46,13 @@ void USRView::paintEvent( QPaintEvent * evt )
 	{
 		USRTriangle t = transformed_vertices[i];
 
-		QPolygonF tri;
-		tri << QPointF(t.A.X,t.A.Y);
-		tri << QPointF(t.B.X,t.B.Y);
-		tri << QPointF(t.C.X,t.C.Y);
+		QPointF a(t.A.X,t.A.Y);
+		QPointF b(t.B.X,t.B.Y);
+		QPointF c(t.C.X,t.C.Y);
 
-		painter.drawPolygon(tri);
+		painter.drawLine(a,b);
+		painter.drawLine(b,c);
+		painter.drawLine(c,a);
 	}
 }
 
@@ -66,16 +65,16 @@ void USRView::Timeout()
 	//////////////////////////////////////////////////////////////////////////
 	USRMatrix tr1 = USRMatrix::CreateTranslationMatrix(USRVector3(0,0,0));
 	USRMatrix rx1 = USRMatrix::CreateXRotationMatrix(3.1415f/6); //30°
-	USRMatrix ry1 = USRMatrix::CreateYRotationMatrix(t*4); //30°
+	USRMatrix ry1 = USRMatrix::CreateYRotationMatrix(t*6); //30°
 
-	USRMatrix Hworld = tr1*rx1*ry1;
+	USRMatrix Hworld = tr1*ry1;
 	USRMatrix Hview = USRMatrix::CreateLookAtMatrix(
-		USRVector3(0,0,5),
+		USRVector3(0,2,5),
 		USRVector3(0,0,0),
 		USRVector3(0,1,0)
 		);
 
-	USRMatrix Hproj = USRMatrix::CreateOrthoProjectionMatrix(-4,4,-4,4,0.1f,10);
+	USRMatrix Hproj = USRMatrix::CreateOrthoProjectionMatrix(-2.4,2.4,-1.4,1.4,0.1f,10);
 
 	Pipeline = Hproj * Hview * Hworld;
 	//////////////////////////////////////////////////////////////////////////

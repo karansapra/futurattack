@@ -18,6 +18,7 @@ public:
                 X = v.X;
                 Y = v.Y;
                 Z = v.Z;
+				I = v.I;
         }
 
         USRVector3 & operator=(const USRVector3 & v)
@@ -25,6 +26,7 @@ public:
                 X = v.X;
                 Y = v.Y;
                 Z = v.Z;
+				I = v.I;
                 return *this;
         }
 
@@ -104,6 +106,13 @@ public:
 			X /= n;
 			Y /= n;
 			Z /= n;
+		}
+
+		void Invert()
+		{
+			X = -X;
+			Y = -Y;
+			Z = -Z;
 		}
 
 		USRVector3 CrossProduct(USRVector3 & v)
