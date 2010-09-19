@@ -51,6 +51,13 @@ public:
 		return result;
 	}
 
+	void Translate(USRVector3 & t)
+	{
+		USRMatrix tm = CreateTranslationMatrix(t);
+		USRMatrix res = tm * (*this);
+		memcpy(_m,res._m,sizeof(float)*16);
+	}
+
 	static USRMatrix CreateTranslationMatrix(USRVector3 & t)
 	{
 		USRMatrix m;
@@ -113,12 +120,14 @@ public:
 	/**
 	\brief Used to setup a Camera matrix
 	*/
-	static USRMatrix CreateLookAtMatrix(USRVector3 & eye, USRVector3 & center ,USRVector3 & up)
+	static USRMatrix CreateLookAtMatrix(USRVector3 eye, USRVector3 center ,USRVector3 up)
 	{
-		USRVector3 ViewDirection = center - eye;
+		USRVector3 ViewDirection = center-eye;
 		ViewDirection.Normalize();
 		up.Normalize();
 		USRVector3 RightDirection = ViewDirection.CrossProduct(up);
+		RightDirection.Normalize();
+		up = RightDirection.CrossProduct(ViewDirection);
 
 		USRMatrix result;
 
@@ -130,13 +139,18 @@ public:
 		result[5] = up.Y;
 		result[9] = up.Z;
 
-		result[2] = ViewDirection.X;
-		result[6] = ViewDirection.Y;
-		result[10] = ViewDirection.Z;
+		result[2] = -ViewDirection.X;
+		result[6] = -ViewDirection.Y;
+		result[10] = -ViewDirection.Z;
 
+		eye.Invert();
+		result.Translate(eye);
+
+		/*
 		result[12] = -(result[0]*eye.X + result[4]*eye.Y + result[8]*eye.Z);
 		result[13] = -(result[1]*eye.X + result[5]*eye.Y + result[9]*eye.Z);
 		result[14] = -(result[2]*eye.X + result[6]*eye.Y + result[10]*eye.Z);
+		*/
 
 		return result;
 	}
@@ -161,9 +175,9 @@ public:
 		m[5] = 2.0f/(top-bottom);
 		m[10] = 1.0f/(far-near);
 
-		m[3] = (right+left)/(left-right);
-		m[7] = (top+bottom)/(bottom-top);
-		m[11] = near/(near-far);
+		m[12] = (right+left)/(left-right);
+		m[13] = (top+bottom)/(bottom-top);
+		m[14] = near/(near-far);
 
 		return m;
 	}
