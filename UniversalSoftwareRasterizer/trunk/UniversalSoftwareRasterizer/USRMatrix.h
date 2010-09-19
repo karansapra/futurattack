@@ -110,6 +110,9 @@ public:
 		return m;
 	}
 
+	/**
+	\brief Used to setup a Camera matrix
+	*/
 	static USRMatrix CreateLookAtMatrix(USRVector3 & eye, USRVector3 & center ,USRVector3 & up)
 	{
 		USRVector3 ViewDirection = center - eye;
@@ -150,6 +153,20 @@ public:
 		return m;
 	}
 
+	static USRMatrix CreateOrthoProjectionMatrix(float left, float right, float bottom, float top, float near, float far)
+	{
+		USRMatrix m;
+
+		m[0] = 2.0f/(right-left);
+		m[5] = 2.0f/(top-bottom);
+		m[10] = 1.0f/(far-near);
+
+		m[3] = (right+left)/(left-right);
+		m[7] = (top+bottom)/(bottom-top);
+		m[11] = near/(near-far);
+
+		return m;
+	}
 
 	static USRMatrix CreateProjectionMatrix(float left, float right, float bottom, float up, float near, float far)
 	{
