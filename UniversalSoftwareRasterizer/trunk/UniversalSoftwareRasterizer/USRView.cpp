@@ -25,6 +25,12 @@ USRView::USRView()
 		USRVector3(0,0,1)
 		));
 
+	model.push_back(USRTriangle(
+		USRVector3(0,0,0),
+		USRVector3(1,0,0),
+		USRVector3(0,0,1)
+		));
+
 	transformed_vertices.resize(model.size());
 
 	WindowMatrix = USRMatrix::CreateWindowMatrix(480,280);
@@ -69,7 +75,7 @@ void USRView::Timeout()
 
 	USRMatrix Hworld = tr1*ry1;
 	USRMatrix Hview = USRMatrix::CreateLookAtMatrix(
-		USRVector3(0,2,5),
+		USRVector3(5,5,7),
 		USRVector3(0,0,0),
 		USRVector3(0,1,0)
 		);
