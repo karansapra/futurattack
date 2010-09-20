@@ -6,29 +6,74 @@
 USRView::USRView()
 {
 	setFixedSize(480,280);
-	
+
 	model.push_back(USRTriangle(
-		USRVector3(0,0,0),
-		USRVector3(1,0,0),
-		USRVector3(0,1,0)
+		USRVector3(-1,-1,1),
+		USRVector3(1,-1,1),
+		USRVector3(1,1,1)
+		));
+	model.push_back(USRTriangle(
+		USRVector3(-1,-1,1),		
+		USRVector3(1,1,1),
+		USRVector3(-1,1,1)
 		));
 
 	model.push_back(USRTriangle(
-		USRVector3(0,0,0),
-		USRVector3(0,1,0),
-		USRVector3(0,0,1)
+		USRVector3(-1,-1,-1),
+		USRVector3(1,-1,-1),
+		USRVector3(1,1,-1)
+		));
+	model.push_back(USRTriangle(
+		USRVector3(-1,-1,-1),		
+		USRVector3(1,1,-1),
+		USRVector3(-1,1,-1)
+		));
+
+
+		
+	model.push_back(USRTriangle(
+		USRVector3(1,-1,1),		
+		USRVector3(1,-1,-1),
+		USRVector3(1,1,-1)
+		));
+	model.push_back(USRTriangle(
+		USRVector3(1,-1,1),		
+		USRVector3(1,1,1),
+		USRVector3(1,1,-1)
 		));
 
 	model.push_back(USRTriangle(
-		USRVector3(0,0,0),
-		USRVector3(1,0,0),
-		USRVector3(0,0,1)
+		USRVector3(-1,-1,1),		
+		USRVector3(-1,-1,-1),
+		USRVector3(-1,1,-1)
+		));
+	model.push_back(USRTriangle(
+		USRVector3(-1,-1,1),		
+		USRVector3(-1,1,1),
+		USRVector3(-1,1,-1)
+		));
+
+
+	model.push_back(USRTriangle(
+		USRVector3(-1,-1,1),
+		USRVector3(-1,-1,-1),
+		USRVector3(1,-1,-1)
+		));
+	model.push_back(USRTriangle(
+		USRVector3(1,-1,1),
+		USRVector3(-1,-1,1),
+		USRVector3(1,-1,-1)
 		));
 
 	model.push_back(USRTriangle(
-		USRVector3(0,0,0),
-		USRVector3(1,0,0),
-		USRVector3(0,0,1)
+		USRVector3(-1,1,1),
+		USRVector3(-1,1,-1),
+		USRVector3(1,1,-1)
+		));
+	model.push_back(USRTriangle(
+		USRVector3(1,1,1),
+		USRVector3(-1,1,1),
+		USRVector3(1,1,-1)
 		));
 
 	transformed_vertices.resize(model.size());
@@ -66,14 +111,14 @@ float t=0;
 
 void USRView::Timeout()
 {	
-	t += 0.01f;
+	t += 0.02f;
 
 	//////////////////////////////////////////////////////////////////////////
 	USRMatrix tr1 = USRMatrix::CreateTranslationMatrix(USRVector3(0,0,0));
-	USRMatrix rx1 = USRMatrix::CreateXRotationMatrix(3.1415f/6); //30°
+	USRMatrix rx1 = USRMatrix::CreateXRotationMatrix(t*2.12315f); //30°
 	USRMatrix ry1 = USRMatrix::CreateYRotationMatrix(t*6); //30°
 
-	USRMatrix Hworld = tr1*ry1;
+	USRMatrix Hworld = tr1*rx1*ry1;
 	USRMatrix Hview = USRMatrix::CreateLookAtMatrix(
 		USRVector3(5,5,7),
 		USRVector3(0,0,0),
